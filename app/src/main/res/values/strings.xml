@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Musica</string>
+    <string name="activity_sign_in_sign_in_text">Sign In</string>
+</resources>
