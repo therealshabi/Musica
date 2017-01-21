@@ -1,15 +1,16 @@
 package com.finiteloop.musica;
 
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 public class SignInActivity extends AppCompatActivity {
 
-    CoordinatorLayout mCoordinatorLayout;
+    TextView mSignUp;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -17,9 +18,13 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.activity_sign_in);
-        Drawable background = getResources().getDrawable(R.drawable.sign_in_background);
-        background.setAlpha(150);
-        mCoordinatorLayout.setBackground(background);
+        mSignUp = (TextView) findViewById(R.id.activity_sign_in_sign_up_text);
+
+        mSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+            }
+        });
     }
 }
