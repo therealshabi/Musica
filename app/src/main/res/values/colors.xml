@@ -3,4 +3,5 @@
     <color name="colorPrimary">#303048</color>
     <color name="colorPrimaryDark">#2C2C44</color>
     <color name="colorAccent">#FF2B54</color>
+    <color name="profileDescriptionBackground">#B71C1C</color>
 </resources>
