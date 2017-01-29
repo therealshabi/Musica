@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Musica</string>
+    <string name="app_name">Música</string>
     <string name="activity_sign_in_sign_in_text">Sign In</string>
     <string name="sub_app_name">musix-socio remix</string>
     <string name="email_text">EMAIL</string>
@@ -9,4 +9,5 @@
     <string name="sign_in_text">Sign In</string>
     <string name="sign_up_prompt">Don\'t have an account?</string>
     <string name="signup_prompt">SignUp</string>
+    <string name="ProfileScreenToolbarText">Profile</string>
 </resources>
