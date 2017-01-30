@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_profile"
-    android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:background="@android:color/black"
     tools:context="com.finiteloop.musica.ProfileActivity">
 
 
@@ -32,8 +33,8 @@
         <android.support.v7.widget.CardView
             android:id="@+id/profile_activity_card_view"
             android:layout_width="match_parent"
-            android:layout_below="@id/profile_activity_app_bar_layout"
             android:layout_height="200dp"
+            android:layout_below="@id/profile_activity_app_bar_layout"
             app:cardElevation="16dp">
 
             <RelativeLayout
@@ -57,13 +58,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="28dp"
                     android:layout_marginTop="72dp"
-                    android:textStyle="bold"
                     android:layout_toRightOf="@id/profile_activity_profile_pic"
                     android:elevation="16dp"
                     android:fontFamily="sans-serif-smallcaps"
                     android:text="Shivam Gupta"
                     android:textColor="@android:color/white"
-                    android:textSize="28sp" />
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,9 +83,9 @@
                     android:id="@+id/profile_activity_cover_pic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@android:color/black"
+                    android:background="@drawable/concert"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/concert" />
+                    android:src="@drawable/profile_page_gradient" />
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
@@ -92,8 +93,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/profile_activity_recycler_view"
             android:layout_width="match_parent"
-            android:layout_below="@id/profile_activity_card_view"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_activity_card_view">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -103,10 +104,10 @@
     <android.support.design.widget.FloatingActionButton
         android:layout_width="100dp"
         android:layout_height="48dp"
-        android:elevation="24dp"
-        app:elevation="16dp"
-        android:src="@drawable/ic_person_white_24dp"
         android:layout_marginRight="20dp"
+        android:elevation="24dp"
+        android:src="@drawable/ic_person_white_24dp"
+        app:elevation="16dp"
         app:layout_anchor="@id/profile_activity_card_view"
         app:layout_anchorGravity="bottom|right" />
 

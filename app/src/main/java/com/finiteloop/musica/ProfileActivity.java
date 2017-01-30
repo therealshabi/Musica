@@ -2,7 +2,6 @@ package com.finiteloop.musica;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -47,23 +46,26 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
         }
 
-        Drawable coverPic = getResources().getDrawable(R.drawable.concert);
+        /*Drawable coverPic = getResources().getDrawable(R.drawable.concert);
         coverPic.setAlpha(150);
-        mCoverPic.setImageDrawable(coverPic);
+        mCoverPic.setImageDrawable(coverPic);*/
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
 
         ArrayList<ProfileAlbums> profileAlbum = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            profileAlbum.add(new ProfileAlbums("Coldplay", 83, getResources().getDrawable(R.drawable.coldplay)));
-        }
+        profileAlbum.add(new ProfileAlbums("Coldplay", 4, getResources().getDrawable(R.drawable.coldplay)));
+        profileAlbum.add(new ProfileAlbums("Florida Whistle", 1, getResources().getDrawable(R.drawable.coldplay2)));
+        profileAlbum.add(new ProfileAlbums("One Direction", 2, getResources().getDrawable(R.drawable.coldplay3)));
+        profileAlbum.add(new ProfileAlbums("Gangnam Style", 5, getResources().getDrawable(R.drawable.coldplay4)));
+        profileAlbum.add(new ProfileAlbums("Arijit Singh", 25, getResources().getDrawable(R.drawable.coldplay5)));
+
 
         mRecyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(), profileAlbum));
 
         mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ProfileActivity.this,ProfileDescriptionActivity.class));
+                startActivity(new Intent(ProfileActivity.this, ProfileDescriptionActivity.class));
             }
         });
 

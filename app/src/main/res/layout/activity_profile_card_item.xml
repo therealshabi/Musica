@@ -23,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:alpha="0.9"
             android:background="@android:color/black"
             android:orientation="vertical"
@@ -35,10 +35,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:fontFamily="sans-serif-smallcaps"
-                android:padding="4dp"
+                android:padding="2dp"
                 android:text="Album Name"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/activity_profile_card_item_song_number"
@@ -46,10 +46,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:fontFamily="sans-serif"
-                android:padding="2dp"
+                android:padding="1dp"
                 android:text="5 Songs"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
