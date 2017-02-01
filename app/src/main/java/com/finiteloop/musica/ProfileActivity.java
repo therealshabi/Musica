@@ -129,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mImageView;
         TextView mAlbumName;
@@ -137,9 +137,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mImageView = (ImageView) itemView.findViewById(R.id.activity_profile_card_item_album_pic);
             mAlbumName = (TextView) itemView.findViewById(R.id.activity_profile_card_item_album_name);
             mNumOfSongs = (TextView) itemView.findViewById(R.id.activity_profile_card_item_song_number);
+        }
+
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(ProfileActivity.this,PlaylistActivity.class));
         }
     }
 }
