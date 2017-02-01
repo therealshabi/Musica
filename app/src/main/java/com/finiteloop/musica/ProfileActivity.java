@@ -2,7 +2,10 @@ package com.finiteloop.musica;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView mCoverPic;
     RecyclerView mRecyclerView;
     Toolbar mToolbar;
-    CardView mCardView;
+    CollapsingToolbarLayout mCollapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +39,14 @@ public class ProfileActivity extends AppCompatActivity {
         mCoverPic = (ImageView) findViewById(R.id.profile_activity_cover_pic);
         mRecyclerView = (RecyclerView) findViewById(R.id.profile_activity_recycler_view);
         mToolbar = (Toolbar) findViewById(R.id.profile_activity_toolbar);
-        mCardView = (CardView) findViewById(R.id.profile_activity_card_view);
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profile_activity_collapsing_toolbar);
 
         setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
             getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setTitle("");
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
         }
 
@@ -53,7 +57,8 @@ public class ProfileActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
 
         ArrayList<ProfileAlbums> profileAlbum = new ArrayList<>();
-        profileAlbum.add(new ProfileAlbums("Coldplay", 4, getResources().getDrawable(R.drawable.coldplay)));
+
+        profileAlbum.add(new ProfileAlbums("Coldplay", 4, getResources().getDrawable(R.drawable.coldplay5)));
         profileAlbum.add(new ProfileAlbums("Florida Whistle", 1, getResources().getDrawable(R.drawable.coldplay2)));
         profileAlbum.add(new ProfileAlbums("One Direction", 2, getResources().getDrawable(R.drawable.coldplay3)));
         profileAlbum.add(new ProfileAlbums("Gangnam Style", 5, getResources().getDrawable(R.drawable.coldplay4)));
@@ -62,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         mRecyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(), profileAlbum));
 
-        mCardView.setOnClickListener(new View.OnClickListener() {
+        mCollapsingToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ProfileActivity.this, ProfileDescriptionActivity.class));

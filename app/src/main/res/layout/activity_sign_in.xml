@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:background="@color/colorAccent"
+                    android:background="@drawable/button_background"
                     android:padding="12dp"
                     android:elevation="8dp"
                     android:text="@string/dive_in_text"
@@ -134,6 +134,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/activity_sign_in_sign_up_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -149,7 +150,6 @@
                         android:textColor="@color/colorPrimary" />
 
                     <TextView
-                        android:id="@+id/activity_sign_in_sign_up_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"

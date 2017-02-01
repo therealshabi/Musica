@@ -18,8 +18,6 @@ public class HomeStreamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_stream);
 
-        Toast.makeText(this, "Activity Started", Toast.LENGTH_SHORT).show();
-
         recyclerView=(RecyclerView)findViewById(R.id.home_stream_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         recyclerView.setAdapter(new RecyclerViewAdapter());
