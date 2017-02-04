@@ -12,16 +12,17 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SignInActivity">
         </activity>
-        <activity android:name=".HomeStreamActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".ProfileDescriptionActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".PlaylistActivity">
+        <activity android:name=".HomeStreamActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".ProfileDescriptionActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".PlaylistActivity">
         </activity>
     </application>
 

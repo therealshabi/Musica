@@ -10,4 +10,13 @@
     <string name="sign_up_prompt">Don\'t have an account?</string>
     <string name="signup_prompt">SignUp</string>
     <string name="ProfileScreenToolbarText">Profile</string>
+    
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="playlist">Playlist</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="reportAndFeedback">Report and Feedback</string>
+    <string name="signout">Sign Out</string>
 </resources>

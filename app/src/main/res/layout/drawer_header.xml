@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="200dp"
+    android:alpha="0.8"
+    android:background="@drawable/profile_page_gradient"
+    android:orientation="vertical">
+
+    <com.github.siyamed.shapeimageview.CircularImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/profile_pic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="Shivam Gupta"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="gupta.shivam97@gmail.com"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+
+</LinearLayout>
