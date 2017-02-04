@@ -5,8 +5,8 @@
     android:id="@+id/activity_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
     android:background="@android:color/black"
+    android:clipToPadding="false"
     tools:context="com.finiteloop.musica.ProfileActivity">
 
 
@@ -18,83 +18,81 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/profile_activity_app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="168dp">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/profile_activity_toolbar"
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/profile_activity_collapsing_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="@string/ProfileScreenToolbarText"
-                app:titleTextColor="@android:color/white">
+                android:layout_height="match_parent"
+                android:layout_below="@id/profile_activity_app_bar_layout"
+                android:clickable="true">
 
-            </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/profile_activity_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@id/profile_activity_app_bar_layout"
-            app:cardElevation="16dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <com.github.siyamed.shapeimageview.CircularImageView
-                    android:id="@+id/profile_activity_profile_pic"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="28dp"
-                    android:elevation="20dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile_pic" />
-
-                <TextView
-                    android:id="@+id/profile_activity_profile_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="28dp"
-                    android:layout_marginTop="72dp"
-                    android:layout_toRightOf="@id/profile_activity_profile_pic"
-                    android:elevation="16dp"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:text="Shivam Gupta"
-                    android:textColor="@android:color/white"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/profile_activity_profile_name"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_toRightOf="@id/profile_activity_profile_pic"
-                    android:elevation="2dp"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:text="873 Albums"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/profile_activity_cover_pic"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/concert"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile_page_gradient" />
-            </RelativeLayout>
+                    android:layout_height="wrap_content">
 
-        </android.support.v7.widget.CardView>
+                    <com.github.siyamed.shapeimageview.CircularImageView
+                        android:id="@+id/profile_activity_profile_pic"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="28dp"
+                        android:elevation="20dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/profile_pic" />
+
+                    <TextView
+                        android:id="@+id/profile_activity_profile_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="28dp"
+                        android:layout_marginTop="64dp"
+                        android:layout_toRightOf="@id/profile_activity_profile_pic"
+                        android:elevation="16dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:text="Shivam Gupta"
+                        android:textColor="@android:color/white"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/profile_activity_profile_name"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_toRightOf="@id/profile_activity_profile_pic"
+                        android:elevation="2dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:text="873 Albums"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/profile_activity_cover_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/mountain_pic2"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/profile_page_gradient" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/profile_activity_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/profile_activity_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profile_activity_card_view">
+            android:layout_below="@id/profile_activity_app_bar_layout">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -108,7 +106,7 @@
         android:elevation="24dp"
         android:src="@drawable/ic_person_white_24dp"
         app:elevation="16dp"
-        app:layout_anchor="@id/profile_activity_card_view"
+        app:layout_anchor="@id/profile_activity_collapsing_toolbar"
         app:layout_anchorGravity="bottom|right" />
 
 </android.support.design.widget.CoordinatorLayout>

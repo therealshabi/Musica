@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import com.like.IconType;
+import com.like.LikeButton;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button button;

@@ -7,11 +7,12 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SignInActivity extends AppCompatActivity {
 
-    TextView mSignUp;
+    LinearLayout mSignUp;
     Button mSignIn;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -20,7 +21,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        mSignUp = (TextView) findViewById(R.id.activity_sign_in_sign_up_text);
+        mSignUp = (LinearLayout) findViewById(R.id.activity_sign_in_sign_up_text);
         mSignIn = (Button) findViewById(R.id.activity_sign_in_button);
 
         mSignUp.setOnClickListener(new View.OnClickListener() {
