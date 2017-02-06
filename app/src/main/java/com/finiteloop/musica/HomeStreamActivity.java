@@ -98,7 +98,7 @@ public class HomeStreamActivity extends AppCompatActivity {
 
         @Override
         public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view= LayoutInflater.from(getBaseContext()).inflate(R.layout.homestream_card_view_1,parent,false);
+            View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.homestream_card_view, parent, false);
             return new RecyclerViewHolder(view);
         }
 

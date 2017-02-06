@@ -1,35 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
-    android:layout_height="200dp"
+    android:layout_height="240dp"
     android:alpha="0.8"
-    android:background="@drawable/profile_page_gradient"
+    android:background="@android:color/black"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.6"
+        android:scaleType="centerCrop"
+        android:src="@drawable/header_background" />
+
+
     <com.github.siyamed.shapeimageview.CircularImageView
+        android:id="@+id/home_stream_navigation_profile_pic"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="44dp"
         android:src="@drawable/profile_pic" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="Shivam Gupta"
-        android:textColor="@android:color/white"
-        android:textSize="15sp" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="28dp"
+        android:layout_marginLeft="24dp"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="gupta.shivam97@gmail.com"
-        android:layout_marginTop="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="15sp" />
+        <TextView
+            android:id="@+id/home_stream_navigation_profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Shivam Gupta"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/home_stream_navigation_profile_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="gupta.shivam97@gmail.com"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
