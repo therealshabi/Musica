@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:focusableInTouchMode="true"
     android:clipToPadding="false"
+    android:focusableInTouchMode="true"
     tools:context="com.finiteloop.musica.SignInActivity">
 
     <RelativeLayout
@@ -39,7 +39,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/activity_sign_in_card_view"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
+            android:layout_height="384dp"
             android:layout_below="@id/activity_sign_in_sub_app_name"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -126,8 +126,8 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/button_background"
-                    android:padding="12dp"
                     android:elevation="8dp"
+                    android:padding="12dp"
                     android:text="@string/dive_in_text"
                     android:textAlignment="center"
                     android:textColor="@android:color/white" />
@@ -138,13 +138,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
                         android:text="@string/sign_up_prompt"
                         android:textAlignment="center"
                         android:textColor="@color/colorPrimary" />
@@ -153,7 +152,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginTop="12dp"
                         android:text="@string/signup_prompt"
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold" />

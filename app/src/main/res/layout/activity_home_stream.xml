@@ -23,20 +23,13 @@
                 android:layout_height="wrap_content">
 
                 <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/home_stream_activity_toolbar"
+                    android:id="@+id/home_stream_activity_collapsing_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/home_stream_activity_toolbar_navigation_toggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="12dp"
-                            android:src="@drawable/ic_view_headline_white_36dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -49,6 +42,13 @@
                             android:textSize="36sp" />
 
                     </RelativeLayout>
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/home_stream_activity_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </android.support.v7.widget.Toolbar>
 
                 </android.support.design.widget.CollapsingToolbarLayout>
             </android.support.design.widget.AppBarLayout>

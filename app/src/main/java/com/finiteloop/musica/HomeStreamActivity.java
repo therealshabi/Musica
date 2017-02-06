@@ -1,5 +1,6 @@
 package com.finiteloop.musica;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -8,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +17,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.finiteloop.musica.Models.ProfileAlbums;
+
 public class HomeStreamActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
-    ImageView mNavigationToggle;
+    Toolbar mToolbar;
     private ImageView searchButton;
     private ImageView profileButton;
     private DrawerLayout mDrawerLayout;
@@ -35,7 +39,16 @@ public class HomeStreamActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_stream_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.activity_home_stream_navigationView);
 
-        mNavigationToggle = (ImageView) findViewById(R.id.home_stream_activity_toolbar_navigation_toggle);
+        mToolbar = (Toolbar) findViewById(R.id.home_stream_activity_toolbar);
+
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+            getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_dehaze_white_24dp));
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.home_stream_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
@@ -55,13 +68,6 @@ public class HomeStreamActivity extends AppCompatActivity {
             }
         });
 
-        mNavigationToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -75,7 +81,8 @@ public class HomeStreamActivity extends AppCompatActivity {
                         return true;
                     }
                     case R.id.navigation_menu_playlist: {
-                        Toast.makeText(getBaseContext(), "Playlist Button Pressed", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        startActivity(new Intent(HomeStreamActivity.this, PlaylistActivity.class));
                         return true;
                     }
                     case R.id.navigation_menu_notifications: {
@@ -83,7 +90,8 @@ public class HomeStreamActivity extends AppCompatActivity {
                         return true;
                     }
                     case R.id.navigation_menu_profile: {
-                        Toast.makeText(getBaseContext(), "Profile Button Pressed", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        startActivity(new Intent(HomeStreamActivity.this, ProfileActivity.class));
                         return true;
                     }
                     case R.id.navigation_menu_report_and_feedback: {
@@ -95,13 +103,25 @@ public class HomeStreamActivity extends AppCompatActivity {
                         return true;
                     }
                     case R.id.navigation_menu_signOut: {
-                        Toast.makeText(getBaseContext(), "SignOut Button Pressed", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        startActivity(new Intent(HomeStreamActivity.this, SignInActivity.class));
+                        Toast.makeText(getBaseContext(), "Signing Out", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
@@ -129,4 +149,5 @@ public class HomeStreamActivity extends AppCompatActivity {
             super(itemView);
         }
     }
+
 }

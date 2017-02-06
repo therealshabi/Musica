@@ -58,11 +58,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         ArrayList<ProfileAlbums> profileAlbum = new ArrayList<>();
 
-        profileAlbum.add(new ProfileAlbums("Coldplay", 4, getResources().getDrawable(R.drawable.coldplay5)));
-        profileAlbum.add(new ProfileAlbums("Florida Whistle", 1, getResources().getDrawable(R.drawable.coldplay2)));
-        profileAlbum.add(new ProfileAlbums("One Direction", 2, getResources().getDrawable(R.drawable.coldplay3)));
-        profileAlbum.add(new ProfileAlbums("Gangnam Style", 5, getResources().getDrawable(R.drawable.coldplay4)));
-        profileAlbum.add(new ProfileAlbums("Arijit Singh", 25, getResources().getDrawable(R.drawable.coldplay5)));
+        profileAlbum.add(new ProfileAlbums("Coldplay", 4, getResources().getDrawable(R.drawable.mountain_pic2)));
+        profileAlbum.add(new ProfileAlbums("Florida Whistle", 1, getResources().getDrawable(R.drawable.mountain_pic2)));
+        profileAlbum.add(new ProfileAlbums("One Direction", 2, getResources().getDrawable(R.drawable.mountain_pic2)));
+        profileAlbum.add(new ProfileAlbums("Gangnam Style", 5, getResources().getDrawable(R.drawable.mountain_pic2)));
+        profileAlbum.add(new ProfileAlbums("Arijit Singh", 25, getResources().getDrawable(R.drawable.mountain_pic2)));
 
 
         mRecyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(), profileAlbum));
