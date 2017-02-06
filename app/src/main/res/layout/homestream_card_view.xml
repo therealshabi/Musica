@@ -7,7 +7,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/activity_home_stream_cardView1"
-        android:layout_width="match_parent"
+            android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
@@ -15,7 +15,7 @@
         app:cardElevation="8dp">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+                android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
@@ -25,88 +25,89 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/mountain_pic2" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/activity_home_stream_cardView1_picture"
-                android:layout_marginBottom="30dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Sport"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:singleLine="false"
-                    android:text="Ve ctvrtek v Alpach promenlive pocast, strediska hlasi novy snih"
-                    android:textColor="@android:color/white" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_alignBottom="@id/activity_home_stream_cardView1_picture"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="alpenski.com"
-                        android:textColor="@android:color/white" />
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginLeft="24dp"
-                        android:layout_marginTop="12dp"
-                        android:src="@drawable/ic_heart" />
+                        android:background="@color/colorAccent"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="Sport"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="10dp"
-                        android:text="827 likes"
+                        android:layout_marginTop="5dp"
+                        android:singleLine="false"
+                        android:text="Ve ctvrtek v Alpach promenlive pocast, strediska hlasi novy snih"
                         android:textColor="@android:color/white" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="28dp"
-                        android:layout_marginTop="10dp"
-                        android:text="pied 40 min"
-                        android:textColor="@android:color/white" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="alpenski.com"
+                            android:textColor="@android:color/white" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/ic_heart" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginTop="10dp"
+                            android:text="827 likes"
+                            android:textColor="@android:color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="28dp"
+                            android:layout_marginTop="10dp"
+                            android:text="pied 40 min"
+                            android:textColor="@android:color/white" />
+                    </LinearLayout>
+
                 </LinearLayout>
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="4dp"
-                android:elevation="12dp"
                 android:layout_marginTop="4dp"
-                android:padding="4dp"
-                android:orientation="horizontal">
+                android:background="@drawable/home_stream_like_buttons_background"
+                android:elevation="12dp"
+                android:orientation="horizontal"
+                android:padding="4dp">
 
                 <com.like.LikeButton
                     android:id="@+id/like"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    app:icon_size="20dp"
                     android:layout_marginRight="2dp"
                     android:clickable="true"
+                    app:icon_size="20dp"
                     app:icon_type="heart">
 
                 </com.like.LikeButton>
@@ -115,10 +116,10 @@
                     android:id="@+id/star_button"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_marginRight="2dp"
                     android:layout_marginLeft="2dp"
-                    app:icon_size="20dp"
+                    android:layout_marginRight="2dp"
                     android:clickable="true"
+                    app:icon_size="20dp"
                     app:icon_type="star">
 
                 </com.like.LikeButton>
@@ -126,11 +127,11 @@
                 <com.like.LikeButton
                     android:id="@+id/thumb"
                     android:layout_width="36dp"
-                    android:layout_marginLeft="2dp"
                     android:layout_height="36dp"
+                    android:layout_marginLeft="2dp"
+                    android:clickable="true"
                     app:icon_size="20dp"
-                    app:icon_type="thumb"
-                    android:clickable="true"/>
+                    app:icon_type="thumb" />
 
             </LinearLayout>
 
