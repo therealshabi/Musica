@@ -14,25 +14,26 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_music_player_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:elevation="16dp">
+            android:layout_height="?attr/actionBarSize">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/activity_music_player_album_name_header"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="52dp"
                     android:fontFamily="cursive"
-                    android:gravity="center"
-                    android:text="Album Name"
+                    android:padding="4dp"
+                    android:text="Coldplay"
                     android:textColor="@color/colorAccent"
-                    android:textSize="28sp" />
+                    android:textSize="32sp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 
@@ -45,7 +46,8 @@
         android:layout_below="@id/activity_music_player_app_bar_layout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
-        android:src="@drawable/profile_pic" />
+        android:elevation="8dp"
+        android:src="@drawable/coldplay" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -55,6 +57,7 @@
         android:background="@drawable/music_player_background">
 
         <LinearLayout
+            android:id="@+id/activity_music_player_play_linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -64,14 +67,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:src="@drawable/ic_fast_rewind_white_24dp"
                 app:backgroundTint="@color/colorPrimary"
-                app:fabSize="auto" />
+                app:fabSize="mini" />
 
             <ToggleButton
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="24dp"
                 android:background="@drawable/music_player_button"
+                android:elevation="8dp"
+                android:foreground="@drawable/music_player_play_pause_button"
                 android:textOff="" />
 
             <android.support.design.widget.FloatingActionButton
@@ -79,10 +85,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="4dp"
+                android:src="@drawable/ic_fast_forward_white_24dp"
                 app:backgroundTint="@color/colorPrimary"
                 app:fabSize="mini" />
 
         </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/activity_music_player_volume"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_music_player_play_linear_layout"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp"
+            android:max="100"
+            android:progress="64"
+            android:progressTint="@android:color/white"
+            android:thumbTint="@android:color/white" />
+
+        <ToggleButton
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_below="@id/activity_music_player_play_linear_layout"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/activity_music_player_volume"
+            android:background="@android:color/transparent"
+            android:foreground="@drawable/music_player_volume_toggle"
+            android:textOff=" "
+            android:textOn=" " />
 
     </RelativeLayout>
 

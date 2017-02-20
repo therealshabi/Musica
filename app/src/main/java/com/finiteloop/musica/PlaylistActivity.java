@@ -1,5 +1,6 @@
 package com.finiteloop.musica;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,10 +67,16 @@ public class PlaylistActivity extends AppCompatActivity {
         }
     }
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(PlaylistActivity.this, MusicPlayer.class));
         }
     }
 }
