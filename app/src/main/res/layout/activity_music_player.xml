@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_music_player"
@@ -8,113 +8,157 @@
     android:background="@color/colorPrimary"
     tools:context="com.finiteloop.musica.MusicPlayer">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/activity_music_player_app_bar_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/activity_music_player_toolbar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/activity_music_player_app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
-            <RelativeLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/activity_music_player_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?attr/actionBarSize">
 
-                <TextView
-                    android:id="@+id/activity_music_player_album_name_header"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/activity_music_player_album_name_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:fontFamily="cursive"
+                        android:padding="4dp"
+                        android:text="My Playlist"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="32sp" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/activity_music_player_album_picture"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_below="@id/activity_music_player_app_bar_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:elevation="8dp"
+            android:src="@drawable/coldplay" />
+
+        <TextView
+            android:id="@+id/activity_music_player_album_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_music_player_album_picture"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:text="COLDPLAY"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_music_player_album_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:text="Chris Martin"
+            android:textColor="@android:color/white" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/music_player_background">
+
+            <LinearLayout
+                android:id="@+id/activity_music_player_play_linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true">
+
+                <android.support.design.widget.FloatingActionButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="52dp"
-                    android:fontFamily="cursive"
-                    android:padding="4dp"
-                    android:text="Coldplay"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="32sp" />
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/ic_fast_rewind_white_24dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:fabSize="mini" />
+
+                <ToggleButton
+                    android:id="@+id/activity_music_player_play_pause_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="24dp"
+                    android:background="@drawable/music_player_button"
+                    android:elevation="8dp"
+                    android:foreground="@drawable/music_player_play_pause_button"
+                    android:textOff=""
+                    android:textOn="" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/ic_fast_forward_white_24dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:fabSize="mini" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_music_player_duration_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_music_player_play_linear_layout"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/activity_music_player_start_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:text="00:00"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/activity_music_player_end_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="24dp"
+                    android:text="05:00"
+                    android:textColor="@android:color/white" />
 
             </RelativeLayout>
 
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <com.github.siyamed.shapeimageview.CircularImageView
-        android:id="@+id/activity_music_player_album_picture"
-        android:layout_width="260dp"
-        android:layout_height="200dp"
-        android:layout_below="@id/activity_music_player_app_bar_layout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:elevation="8dp"
-        android:src="@drawable/coldplay" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/music_player_background">
-
-        <LinearLayout
-            android:id="@+id/activity_music_player_play_linear_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true">
-
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
+            <SeekBar
+                android:id="@+id/activity_music_player_song_progress"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:src="@drawable/ic_fast_rewind_white_24dp"
-                app:backgroundTint="@color/colorPrimary"
-                app:fabSize="mini" />
+                android:layout_below="@id/activity_music_player_duration_text"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:max="100"
+                android:progress="0"
+                android:progressTint="@android:color/white"
+                android:thumbTint="@android:color/white" />
 
-            <ToggleButton
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="24dp"
-                android:background="@drawable/music_player_button"
-                android:elevation="8dp"
-                android:foreground="@drawable/music_player_play_pause_button"
-                android:textOff="" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="4dp"
-                android:src="@drawable/ic_fast_forward_white_24dp"
-                app:backgroundTint="@color/colorPrimary"
-                app:fabSize="mini" />
-
-        </LinearLayout>
-
-        <SeekBar
-            android:id="@+id/activity_music_player_volume"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/activity_music_player_play_linear_layout"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="24dp"
-            android:max="100"
-            android:progress="64"
-            android:progressTint="@android:color/white"
-            android:thumbTint="@android:color/white" />
-
-        <ToggleButton
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_below="@id/activity_music_player_play_linear_layout"
-            android:layout_marginTop="16dp"
-            android:layout_toRightOf="@id/activity_music_player_volume"
-            android:background="@android:color/transparent"
-            android:foreground="@drawable/music_player_volume_toggle"
-            android:textOff=" "
-            android:textOn=" " />
-
+        </RelativeLayout>
     </RelativeLayout>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
