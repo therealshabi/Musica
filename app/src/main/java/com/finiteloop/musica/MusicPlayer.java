@@ -79,6 +79,27 @@ public class MusicPlayer extends AppCompatActivity {
             }
         });
 
+        mProgressSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mMediaPlayer != null && fromUser) {
+                    mMediaPlayer.seekTo(progress);
+                    mProgressSeek.setProgress(progress);
+                }
+            }
+        });
+
     }
 
     @Override
