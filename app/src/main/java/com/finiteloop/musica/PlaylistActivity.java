@@ -1,6 +1,7 @@
 package com.finiteloop.musica;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,9 +11,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 public class PlaylistActivity extends AppCompatActivity {
 
+    MediaPlayer mMediaPlayer;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
 
@@ -26,7 +30,7 @@ public class PlaylistActivity extends AppCompatActivity {
         recyclerView.setAdapter(new RecyclerViewAdapter());
 
         toolbar = (Toolbar) findViewById(R.id.activity_playlist_toolBar);
-
+        mMediaPlayer = MediaPlayer.create(this, R.raw.coldplay);
 
         setSupportActionBar(toolbar);
 
@@ -58,7 +62,16 @@ public class PlaylistActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-
+            holder.mPlayPauseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        mMediaPlayer.start();
+                    } else {
+                        mMediaPlayer.pause();
+                    }
+                }
+            });
         }
 
         @Override
@@ -69,9 +82,12 @@ public class PlaylistActivity extends AppCompatActivity {
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        ToggleButton mPlayPauseButton;
+
         public RecyclerViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            mPlayPauseButton = (ToggleButton) itemView.findViewById(R.id.activity_playlist_play_pause_button);
         }
 
         @Override
