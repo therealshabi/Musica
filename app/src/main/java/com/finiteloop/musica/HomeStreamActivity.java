@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.finiteloop.musica.Models.ProfileAlbums;
-
 public class HomeStreamActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
@@ -77,7 +75,9 @@ public class HomeStreamActivity extends AppCompatActivity {
                         return true;
                     }
                     case R.id.navigation_menu_explore: {
-                        Toast.makeText(getBaseContext(), "Explore Button Pressed", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getBaseContext(), "Explore Button Pressed", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        startActivity(new Intent(HomeStreamActivity.this, SearchActivity.class));
                         return true;
                     }
                     case R.id.navigation_menu_playlist: {
