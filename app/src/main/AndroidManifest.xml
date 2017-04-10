@@ -14,16 +14,18 @@
         <activity android:name=".PlaylistActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileDescriptionActivity" />
-        <activity android:name=".SignInActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".SignInActivity" />
         <activity android:name=".HomeStreamActivity" />
         <activity android:name=".MusicPlayer" />
         <activity android:name=".SearchActivity" />
+        <activity
+            android:name=".SplashScreenActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
