@@ -17,10 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class HomeStreamActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
     Toolbar mToolbar;
+    FirebaseAuth mAuth;
     private ImageView searchButton;
     private ImageView profileButton;
     private DrawerLayout mDrawerLayout;
@@ -30,6 +33,8 @@ public class HomeStreamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_stream);
+
+        mAuth = FirebaseAuth.getInstance();
 
         searchButton = (ImageView) findViewById(R.id.activity_home_stream_searchButton);
         profileButton = (ImageView) findViewById(R.id.activity_home_stream_profileButton);
@@ -103,9 +108,11 @@ public class HomeStreamActivity extends AppCompatActivity {
                         return true;
                     }
                     case R.id.navigation_menu_signOut: {
+                        mAuth.signOut();
                         mDrawerLayout.closeDrawer(GravityCompat.START);
+                        finish();
                         startActivity(new Intent(HomeStreamActivity.this, SignInActivity.class));
-                        Toast.makeText(getBaseContext(), "Signing Out", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "Logged Out Successfully", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 }

@@ -18,11 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -70,15 +67,16 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                createNewUser(task.getResult().getUser());
+                                createNewUser();
                                 Toast.makeText(getBaseContext(), "Signed Up Successfully", Toast.LENGTH_SHORT).show();
                                 finish();
+                                mProgressDialog.dismiss();
                                 startActivity(new Intent(SignUpActivity.this, HomeStreamActivity.class));
                             } else {
                                 Log.d("Error", task.getException().getMessage());
-                                Snackbar.make(mCoordinatorLayout, "There was an error while signing you up", Snackbar.LENGTH_SHORT).show();
+                                mProgressDialog.dismiss();
+                                Snackbar.make(mCoordinatorLayout, task.getException().getMessage(), Snackbar.LENGTH_SHORT).show();
                             }
-                            mProgressDialog.dismiss();
                         }
                     });
                 }
@@ -103,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
         if (TextUtils.isEmpty(password)) {
             Snackbar.make(mCoordinatorLayout, "Password cannot be empty", Snackbar.LENGTH_SHORT).show();
-            mEmail.setError("Password cannot be empty");
+            mPassword.setError("Password cannot be empty");
             return false;
         }
         if (username.length() < 4) {
@@ -125,11 +123,7 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
-    private void createNewUser(FirebaseUser userFromRegistration) {
-        String email = userFromRegistration.getEmail();
-        String userId = userFromRegistration.getUid();
-        HashMap<String, String> user = new HashMap<>();
-        user.put(username, email);
-        mDatabase.child("Users").child(userId).setValue(user);
+    private void createNewUser() {
+        mDatabase.child("Users").child(username).setValue(email);
     }
 }
