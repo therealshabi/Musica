@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,27 +18,23 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mobsandgeeks.saripaar.ValidationError;
-import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.List;
+import java.util.HashMap;
 
-public class SignUpActivity extends AppCompatActivity implements Validator.ValidationListener {
+public class SignUpActivity extends AppCompatActivity {
 
-    @NotEmpty
     EditText mUsername;
-    @NotEmpty
-    @Email
     EditText mEmail;
     EditText mPassword;
     Button mSignIn,mSignUp;
     String email, password, username;
-    Validator mValidator;
     FirebaseAuth mAuth;
     ProgressDialog mProgressDialog;
     CoordinatorLayout mCoordinatorLayout;
+    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +42,7 @@ public class SignUpActivity extends AppCompatActivity implements Validator.Valid
         setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
-
-        mValidator = new Validator(this);
-        mValidator.setValidationListener(this);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mSignIn = (Button) findViewById(R.id.activity_sign_up_sign_in);
         mSignUp = (Button) findViewById(R.id.activity_sign_up_button);
@@ -67,71 +63,73 @@ public class SignUpActivity extends AppCompatActivity implements Validator.Valid
         mSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mProgressDialog.setMessage("Signing up, Please Wait...");
-                mProgressDialog.show();
-                if (mPassword.getText().toString().length() < 6) {
-                    mPassword.setError("Password too Short");
+                if (validateCredentials()) {
+                    mProgressDialog.setMessage("Signing up, Please Wait...");
+                    mProgressDialog.show();
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                createNewUser(task.getResult().getUser());
+                                Toast.makeText(getBaseContext(), "Signed Up Successfully", Toast.LENGTH_SHORT).show();
+                                finish();
+                                startActivity(new Intent(SignUpActivity.this, HomeStreamActivity.class));
+                            } else {
+                                Log.d("Error", task.getException().getMessage());
+                                Snackbar.make(mCoordinatorLayout, "There was an error while signing you up", Snackbar.LENGTH_SHORT).show();
+                            }
+                            mProgressDialog.dismiss();
+                        }
+                    });
                 }
-                mValidator.validate();
             }
         });
     }
 
-    @Override
-    public void onValidationSucceeded() {
+
+    private boolean validateCredentials() {
         email = mEmail.getText().toString().trim();
         password = mPassword.getText().toString().trim();
         username = mUsername.getText().toString().trim();
-
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getBaseContext(), "Signed Up Successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                    startActivity(new Intent(SignUpActivity.this, HomeStreamActivity.class));
-                } else {
-                    Snackbar.make(mCoordinatorLayout, "There was an error while signing you up", Snackbar.LENGTH_SHORT).show();
-                }
-                mProgressDialog.dismiss();
-            }
-        });
-    }
-
-
-    @Override
-    public void onValidationFailed(List<ValidationError> errors) {
-        mProgressDialog.dismiss();
-        for (ValidationError error : errors) {
-            View view = error.getView();
-            String message = error.getCollatedErrorMessage(this);
-
-            // Display error messages ;)
-            if (view instanceof EditText) {
-                ((EditText) view).setError(message);
-            } else {
-                Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-            }
+        if (TextUtils.isEmpty(username)) {
+            Snackbar.make(mCoordinatorLayout, "Username cannot be empty", Snackbar.LENGTH_SHORT).show();
+            mUsername.setError("Username cannot be empty");
+            return false;
         }
-
-    }
-
-    /*private boolean validateCredentials() {
-        email = mEmail.getText().toString().trim();
-        password = mPassword.getText().toString().trim();
-        username = mUsername.getText().toString().trim();
         if(TextUtils.isEmpty(email)){
-            Snackbar.make(mRelativeLayout,"Email cannot be empty",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mCoordinatorLayout, "Email cannot be empty", Snackbar.LENGTH_SHORT).show();
+            mEmail.setError("Email cannot be empty");
             return false;
         }
-        if(TextUtils.isEmpty(password)){
-            Snackbar.make(mRelativeLayout,"Password cannot be empty",Snackbar.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(password)) {
+            Snackbar.make(mCoordinatorLayout, "Password cannot be empty", Snackbar.LENGTH_SHORT).show();
+            mEmail.setError("Password cannot be empty");
             return false;
         }
-        if(TextUtils.isEmpty(username)){
-            Snackbar.make(mRelativeLayout,"Username cannot be empty",Snackbar.LENGTH_SHORT).show();
+        if (username.length() < 4) {
+            Snackbar.make(mCoordinatorLayout, "Username too small", Snackbar.LENGTH_SHORT).show();
+            mUsername.setError("Username should be greater than 4 size");
+            return false;
+        }
+        if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+            Snackbar.make(mCoordinatorLayout, "Please Enter Valid Email Address", Snackbar.LENGTH_SHORT).show();
+            mEmail.setError("Email Address Invalid");
+            return false;
+        }
+
+        if (password.length() < 6) {
+            Snackbar.make(mCoordinatorLayout, "Password should be of minimum size 6", Snackbar.LENGTH_SHORT).show();
+            mPassword.setError("Password should not be less than 6 characters");
             return false;
         }
         return true;
-    }*/
+    }
+
+    private void createNewUser(FirebaseUser userFromRegistration) {
+        String email = userFromRegistration.getEmail();
+        String userId = userFromRegistration.getUid();
+        HashMap<String, String> user = new HashMap<>();
+        user.put(username, email);
+        mDatabase.child("Users").child(userId).setValue(user);
+    }
 }
