@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,8 +24,7 @@ public class HomeStreamActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
     Toolbar mToolbar;
     FirebaseAuth mAuth;
-    private ImageView searchButton;
-    private ImageView profileButton;
+    CardView mAddPostCardView;
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
 
@@ -36,11 +35,9 @@ public class HomeStreamActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        searchButton = (ImageView) findViewById(R.id.activity_home_stream_searchButton);
-        profileButton = (ImageView) findViewById(R.id.activity_home_stream_profileButton);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_stream_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.activity_home_stream_navigationView);
+        mAddPostCardView = (CardView) findViewById(R.id.activity_home_stream_add_post_card_view);
 
         mToolbar = (Toolbar) findViewById(R.id.home_stream_activity_toolbar);
 
@@ -57,17 +54,10 @@ public class HomeStreamActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         recyclerView.setAdapter(new RecyclerViewAdapter());
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        mAddPostCardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "Search Activity shows up ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "Profile Activity shows up ", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                startActivity(new Intent(HomeStreamActivity.this, AddPostActivity.class));
             }
         });
 

@@ -146,14 +146,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/sign_up_prompt"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@android:color/black" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:text="@string/signup_prompt"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@android:color/black"
                         android:textStyle="bold" />
 
                 </LinearLayout>

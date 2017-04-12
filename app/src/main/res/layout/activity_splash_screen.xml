@@ -8,6 +8,19 @@
     android:orientation="vertical"
     tools:context="com.finiteloop.musica.SplashScreenActivity">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="52dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="60dp"
+        android:contentDescription="App Logo"
+        android:src="@drawable/ic_app_logo" />
+
     <TextView
         android:id="@+id/appName"
         android:layout_width="match_parent"
@@ -34,19 +47,6 @@
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="24sp" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginRight="52dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="32dp"
-        android:contentDescription="App Logo"
-        android:src="@drawable/ic_app_logo" />
 
 
 </LinearLayout>

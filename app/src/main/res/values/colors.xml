@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#303048</color>
-    <color name="colorPrimaryDark">#2C2C44</color>
+    <color name="colorPrimary">#190035</color>
+    <color name="colorPrimaryDark">#190035</color>
     <color name="colorAccent">#FF2B54</color>
     <color name="profileDescriptionBackground">#B71C1C</color>
     <color name="orange_500">#FF9800</color>
