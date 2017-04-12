@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginEnd="52dp"
         android:layout_marginLeft="52dp"
@@ -19,7 +19,7 @@
         android:layout_marginStart="52dp"
         android:layout_marginTop="60dp"
         android:contentDescription="App Logo"
-        android:src="@drawable/ic_app_logo" />
+        android:src="@drawable/ic_musica" />
 
     <TextView
         android:id="@+id/appName"
@@ -29,7 +29,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="52dp"
         android:fontFamily="cursive"
         android:text="@string/app_name"
         android:textAlignment="center"
