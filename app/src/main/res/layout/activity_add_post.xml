@@ -77,7 +77,8 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="12dp"
                     android:backgroundTint="@android:color/white"
-                    android:singleLine="false" />
+                    android:singleLine="false"
+                    android:textColor="@android:color/white" />
 
 
             </LinearLayout>
@@ -111,6 +112,7 @@
                 android:textSize="16sp" />
 
             <Spinner
+                android:id="@+id/activity_add_post_genre_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginLeft="16dp"
@@ -134,6 +136,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/activity_add_post_attachment_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -149,6 +152,49 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="8dp"
+                    android:background="@drawable/ic_earphones"
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:tint="@android:color/white" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Album Cover Pic"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/activity_add_post_add_attachment_pic_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="0.8"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:singleLine="false" />
+
+                <ImageButton
+                    android:id="@+id/activity_add_post_attachment_pic"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="8dp"
                     android:background="@drawable/ic_add_image"
                     android:clickable="true"
                     android:elevation="6dp"
@@ -159,6 +205,7 @@
 
             </LinearLayout>
 
+
             <Button
                 android:id="@+id/activity_add_post_submit_button"
                 android:layout_width="match_parent"
@@ -166,7 +213,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:background="@color/colorAccent"
                 android:text="POST IT!"
                 android:textColor="@android:color/white" />
