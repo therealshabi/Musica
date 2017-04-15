@@ -1,0 +1,17 @@
+{
+  "name": "node_api",
+  "version": "1.0.0",
+  "description": "My Node API",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shivam Gupta",
+  "license": "ISC",
+  "dependencies": {
+    "dtrace-provider": "^0.8.1",
+    "mongoose": "^4.9.4",
+    "restify": "^4.3.0",
+    "restify-validator": "^0.3.1"
+  }
+}
