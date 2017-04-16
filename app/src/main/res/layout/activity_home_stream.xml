@@ -67,9 +67,10 @@
 
                     <com.github.siyamed.shapeimageview.CircularImageView
                         android:id="@+id/activity_home_stream_add_post_profile_pic"
-                        android:layout_width="68dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
                         android:src="@drawable/profile_pic" />
 
                     <TextView

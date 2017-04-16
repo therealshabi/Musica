@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -39,6 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     DatabaseReference mDatabase;
     String username, password, email;
     CoordinatorLayout mCoordinatorLayout;
+    String mailId;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -80,6 +82,7 @@ public class SignInActivity extends AppCompatActivity {
                                 Log.d("Check", dataSnapshot.toString());
                                 email = dataSnapshot.getValue(String.class);
                                 if (email != null) {
+                                    mailId = email;
                                     login(email, password);
                                 } else {
                                     mProgressDialog.dismiss();
@@ -110,6 +113,8 @@ public class SignInActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Signed In Successfully", Toast.LENGTH_SHORT).show();
                     finish();
                     mProgressDialog.dismiss();
+                    UserDataSharedPreference.setUsername(getBaseContext(), username);
+                    UserDataSharedPreference.setEmail(getBaseContext(), mailId);
                     startActivity(new Intent(SignInActivity.this, HomeStreamActivity.class));
                 } else {
                     Log.d("Error", task.getException().getMessage());

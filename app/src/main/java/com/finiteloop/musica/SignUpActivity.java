@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -71,6 +72,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(getBaseContext(), "Signed Up Successfully", Toast.LENGTH_SHORT).show();
                                 finish();
                                 mProgressDialog.dismiss();
+                                UserDataSharedPreference.setUsername(getBaseContext(), username);
+                                UserDataSharedPreference.setEmail(getBaseContext(), email);
                                 startActivity(new Intent(SignUpActivity.this, HomeStreamActivity.class));
                             } else {
                                 Log.d("Error", task.getException().getMessage());
