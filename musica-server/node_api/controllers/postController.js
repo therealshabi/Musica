@@ -63,4 +63,61 @@ module.exports = function(server){
 		});
 	});
 
+  // route to update the user liked post
+  server.put("/post/like/:id",function(req,res,next){
+   req.assert('id','Id is required').notEmpty();
+
+   var errors = req.validationErrors();
+   if (errors) {
+     helpers.failure(res,next,errors,404);
+   }
+   PostModel.findOne({ id: req.params.id }, function (err, post) {
+     if(err) {
+       helpers.failure(res,next,'Something went wrong while fetching from the database',500);
+     }
+     if(post === null){
+       helpers.failure(res,next,'The specified user cannot be found in the database',404);
+     }
+     user_like.push(req.params.user_liked_email_address);
+     post.save(function(err) {
+       if(err) {
+         helpers.failure(res,next,'The user cannot be added into the database',500);
+       }
+       else {
+         helpers.success(res,next,user);
+       }
+     });
+     //helpers.success(res,next,user);
+   });
+  });
+
+  // route to update the user loved post
+  server.put("/post/love/:id",function(req,res,next){
+   req.assert('id','Id is required').notEmpty();
+
+   var errors = req.validationErrors();
+   if (errors) {
+     helpers.failure(res,next,errors,404);
+   }
+
+   PostModel.findOne({ id: req.params.id }, function (err, post) {
+     if(err) {
+       helpers.failure(res,next,'Something went wrong while fetching from the database',500);
+     }
+     if(post === null){
+       helpers.failure(res,next,'The specified user cannot be found in the database',404);
+     }
+     user_love.push(req.params.user_loved_email_address);
+     post.save(function(err) {
+       if(err) {
+         helpers.failure(res,next,'The user cannot be added into the database',500);
+       }
+       else {
+         helpers.success(res,next,user);
+       }
+     });
+     //helpers.success(res,next,user);
+   });
+  });
+
 }
