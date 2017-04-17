@@ -39,7 +39,7 @@
                         android:layout_marginLeft="28dp"
                         android:elevation="20dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/profile_pic" />
+                        android:src="@drawable/ic_social" />
 
                     <TextView
                         android:id="@+id/profile_activity_profile_name"

@@ -30,7 +30,7 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/profile_pic" />
+                        android:src="@drawable/ic_social" />
 
                     <TextView
                         android:id="@+id/activity_home_stream_post_user_name_text"

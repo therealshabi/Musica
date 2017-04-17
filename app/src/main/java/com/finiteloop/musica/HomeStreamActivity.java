@@ -3,6 +3,7 @@ package com.finiteloop.musica;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
+import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 public class HomeStreamActivity extends AppCompatActivity {
 
@@ -33,7 +37,9 @@ public class HomeStreamActivity extends AppCompatActivity {
     TextView mHelloUserText;
     TextView mNavigationViewHeaderTextUsername;
     TextView mNavigationViewHeaderTextEmail;
+    CircularImageView mNavigationViewHeaderProfilePic;
     Context mContext;
+    CircularImageView mHomeStreamPostProfileImageView;
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
 
@@ -49,6 +55,7 @@ public class HomeStreamActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.activity_home_stream_navigationView);
         mAddPostCardView = (CardView) findViewById(R.id.activity_home_stream_add_post_card_view);
         mHelloUserText = (TextView) findViewById(R.id.activity_home_stream_hello_user_text);
+        mHomeStreamPostProfileImageView = (CircularImageView) findViewById(R.id.activity_home_stream_add_post_profile_pic);
 
         mHelloUserText.setText("Hello " + UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase() + "..Share something with the world");
 
@@ -76,9 +83,15 @@ public class HomeStreamActivity extends AppCompatActivity {
 
         mNavigationViewHeaderTextUsername = (TextView) navigationView.getHeaderView(0).findViewById(R.id.home_stream_navigation_profile_name);
         mNavigationViewHeaderTextEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.home_stream_navigation_profile_email);
+        mNavigationViewHeaderProfilePic = (CircularImageView) navigationView.getHeaderView(0).findViewById(R.id.home_stream_navigation_profile_pic);
 
         mNavigationViewHeaderTextUsername.setText(UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase());
         mNavigationViewHeaderTextEmail.setText(UserDataSharedPreference.getEmail(getBaseContext()));
+        Log.d("Path", UserDataSharedPreference.getProfileURL(getBaseContext()).toString());
+
+        Uri uri = Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()));
+        Picasso.with(getApplicationContext()).load(uri).into(mHomeStreamPostProfileImageView);
+        Picasso.with(getApplicationContext()).load(uri).into(mNavigationViewHeaderProfilePic);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
