@@ -2,48 +2,48 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:id="@+id/group1">
-        <item
+        <!--<item
             android:id="@+id/navigation_menu_home"
             android:title="@string/home"
             android:icon="@drawable/ic_home_button">
-        </item>
+        </item>-->
         <item
             android:id="@+id/navigation_menu_explore"
-            android:title="@string/explore"
-            android:icon="@drawable/ic_search_button">
+            android:icon="@drawable/ic_search_button"
+            android:title="@string/explore">
         </item>
         <item
             android:id="@+id/navigation_menu_playlist"
-            android:title="@string/playlist"
-            android:icon="@drawable/ic_drawer_playlist">
+            android:icon="@drawable/ic_drawer_playlist"
+            android:title="@string/playlist">
         </item>
         <item
             android:id="@+id/navigation_menu_notifications"
-            android:title="@string/notifications"
-            android:icon="@drawable/ic_drawer_notifications">
+            android:icon="@drawable/ic_drawer_notifications"
+            android:title="@string/notifications">
         </item>
         <item
             android:id="@+id/navigation_menu_profile"
-            android:title="@string/profile"
-            android:icon="@drawable/ic_profile_button">
+            android:icon="@drawable/ic_profile_button"
+            android:title="@string/profile">
         </item>
     </group>
 
     <group android:id="@+id/group2">
         <item
             android:id="@+id/navigation_menu_settings"
-            android:title="@string/settings"
-            android:icon="@drawable/ic_drawer_settings">
+            android:icon="@drawable/ic_drawer_settings"
+            android:title="@string/settings">
         </item>
         <item
             android:id="@+id/navigation_menu_report_and_feedback"
-            android:title="@string/reportAndFeedback"
-            android:icon="@drawable/ic_drawer_feedback">
+            android:icon="@drawable/ic_drawer_feedback"
+            android:title="@string/reportAndFeedback">
         </item>
         <item
             android:id="@+id/navigation_menu_signOut"
-            android:title="@string/signout"
-            android:icon="@drawable/ic_drawer_signout">
+            android:icon="@drawable/ic_drawer_signout"
+            android:title="@string/signout">
         </item>
     </group>
 

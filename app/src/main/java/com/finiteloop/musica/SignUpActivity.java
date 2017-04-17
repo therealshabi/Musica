@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.finiteloop.musica.NetworkUtils.MusicaServerAPICalls;
 import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,12 +23,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SignUpActivity extends AppCompatActivity {
 
     EditText mUsername;
     EditText mEmail;
     EditText mPassword;
-    Button mSignIn,mSignUp;
+    Button mSignIn, mSignUp;
     String email, password, username;
     FirebaseAuth mAuth;
     ProgressDialog mProgressDialog;
@@ -68,13 +72,26 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                createNewUser();
-                                Toast.makeText(getBaseContext(), "Signed Up Successfully", Toast.LENGTH_SHORT).show();
-                                finish();
-                                mProgressDialog.dismiss();
-                                UserDataSharedPreference.setUsername(getBaseContext(), username);
-                                UserDataSharedPreference.setEmail(getBaseContext(), email);
-                                startActivity(new Intent(SignUpActivity.this, HomeStreamActivity.class));
+                                JSONObject jsonObject = createNewUser();
+
+                                //REQUESTING FOR STORING USER DETAIL IN MONGODB
+                                new MusicaServerAPICalls() {
+                                    @Override
+                                    public void isRequestSuccessful(boolean isSuccessful, String message) {
+                                        if (isSuccessful) {
+                                            Toast.makeText(getBaseContext(), "Signed Up Successfully", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                            mProgressDialog.dismiss();
+                                            UserDataSharedPreference.setUsername(getBaseContext(), username);
+                                            UserDataSharedPreference.setEmail(getBaseContext(), email);
+                                            startActivity(new Intent(SignUpActivity.this, HomeStreamActivity.class));
+                                        } else {
+                                            mProgressDialog.dismiss();
+                                            Toast.makeText(getBaseContext(), "There was an Error while Signing Up the User", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }.submitUserSignupDetails(getBaseContext(), jsonObject);
+
                             } else {
                                 Log.d("Error", task.getException().getMessage());
                                 mProgressDialog.dismiss();
@@ -97,7 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
             mUsername.setError("Username cannot be empty");
             return false;
         }
-        if(TextUtils.isEmpty(email)){
+        if (TextUtils.isEmpty(email)) {
             Snackbar.make(mCoordinatorLayout, "Email cannot be empty", Snackbar.LENGTH_SHORT).show();
             mEmail.setError("Email cannot be empty");
             return false;
@@ -126,7 +143,18 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
-    private void createNewUser() {
+    private JSONObject createNewUser() {
         mDatabase.child("Users").child(username).setValue(email);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("user_name", username);
+            jsonObject.put("email_address", email);
+            jsonObject.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("JSON Error", e.toString());
+        }
+
+        return jsonObject;
     }
 }

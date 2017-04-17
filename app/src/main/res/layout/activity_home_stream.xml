@@ -74,6 +74,7 @@
                         android:src="@drawable/profile_pic" />
 
                     <TextView
+                        android:id="@+id/activity_home_stream_hello_user_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/activity_home_stream_add_post_profile_pic"

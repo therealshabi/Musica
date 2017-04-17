@@ -1,11 +1,14 @@
 package com.finiteloop.musica;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +18,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeStreamActivity extends AppCompatActivity {
@@ -25,6 +30,10 @@ public class HomeStreamActivity extends AppCompatActivity {
     Toolbar mToolbar;
     FirebaseAuth mAuth;
     CardView mAddPostCardView;
+    TextView mHelloUserText;
+    TextView mNavigationViewHeaderTextUsername;
+    TextView mNavigationViewHeaderTextEmail;
+    Context mContext;
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
 
@@ -33,11 +42,15 @@ public class HomeStreamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_stream);
 
+        mContext = this;
         mAuth = FirebaseAuth.getInstance();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_stream_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.activity_home_stream_navigationView);
         mAddPostCardView = (CardView) findViewById(R.id.activity_home_stream_add_post_card_view);
+        mHelloUserText = (TextView) findViewById(R.id.activity_home_stream_hello_user_text);
+
+        mHelloUserText.setText("Hello " + UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase() + "..Share something with the world");
 
         mToolbar = (Toolbar) findViewById(R.id.home_stream_activity_toolbar);
 
@@ -52,7 +65,7 @@ public class HomeStreamActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.home_stream_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        recyclerView.setAdapter(new RecyclerViewAdapter());
+        recyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext()));
 
         mAddPostCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,14 +74,20 @@ public class HomeStreamActivity extends AppCompatActivity {
             }
         });
 
+        mNavigationViewHeaderTextUsername = (TextView) navigationView.getHeaderView(0).findViewById(R.id.home_stream_navigation_profile_name);
+        mNavigationViewHeaderTextEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.home_stream_navigation_profile_email);
+
+        mNavigationViewHeaderTextUsername.setText(UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase());
+        mNavigationViewHeaderTextEmail.setText(UserDataSharedPreference.getEmail(getBaseContext()));
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.navigation_menu_home: {
+                    /*case R.id.navigation_menu_home: {
                         Toast.makeText(getBaseContext(), "Home Button Pressed", Toast.LENGTH_SHORT).show();
                         return true;
-                    }
+                    }*/
                     case R.id.navigation_menu_explore: {
                         //Toast.makeText(getBaseContext(), "Explore Button Pressed", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -90,20 +109,37 @@ public class HomeStreamActivity extends AppCompatActivity {
                         return true;
                     }
                     case R.id.navigation_menu_report_and_feedback: {
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                         Toast.makeText(getBaseContext(), "Report And Feedback Button Pressed", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                     case R.id.navigation_menu_settings: {
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                         Toast.makeText(getBaseContext(), "Settings Button Pressed", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                     case R.id.navigation_menu_signOut: {
-                        mAuth.signOut();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setMessage("Are you sure you want to Sign Out?").setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mAuth.signOut();
+                                mDrawerLayout.closeDrawer(GravityCompat.START);
+                                finish();
+                                startActivity(new Intent(HomeStreamActivity.this, SignInActivity.class));
+                                Toast.makeText(getBaseContext(), "Logged Out Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
                         mDrawerLayout.closeDrawer(GravityCompat.START);
-                        finish();
-                        startActivity(new Intent(HomeStreamActivity.this, SignInActivity.class));
-                        Toast.makeText(getBaseContext(), "Logged Out Successfully", Toast.LENGTH_SHORT).show();
-                        return true;
+                        break;
                     }
                 }
                 return false;
@@ -123,6 +159,12 @@ public class HomeStreamActivity extends AppCompatActivity {
 
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
+        Context mContext;
+
+        public RecyclerViewAdapter(Context context) {
+            mContext = context;
+        }
+
         @Override
         public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.homestream_card_view, parent, false);
@@ -131,7 +173,6 @@ public class HomeStreamActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-
         }
 
         @Override
@@ -142,8 +183,10 @@ public class HomeStreamActivity extends AppCompatActivity {
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
+        TextView mUserName;
         public RecyclerViewHolder(View itemView) {
             super(itemView);
+            mUserName = (TextView) itemView.findViewById(R.id.activity_home_stream_post_user_name_text);
         }
     }
 
