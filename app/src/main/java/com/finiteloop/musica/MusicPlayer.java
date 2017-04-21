@@ -23,6 +23,7 @@ public class MusicPlayer extends AppCompatActivity {
     SeekBar mProgressSeek;
     double mCurrentTime = 0.0;
     double mEndTime = 0.0;
+
     Handler myHandler = new Handler();
     private Runnable UpdateSongTime = new Runnable() {
         public void run() {
@@ -52,7 +53,8 @@ public class MusicPlayer extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
         }
 
-        mMediaPlayer = MediaPlayer.create(this, R.raw.coldplay);
+        mMediaPlayer = MusicPlayerSingleton.getInstance(this, R.raw.coldplay);
+        // mMediaPlayer = MediaPlayer.create(this, R.raw.coldplay);
         mProgressSeek = (SeekBar) findViewById(R.id.activity_music_player_song_progress);
         mPlay = (ToggleButton) findViewById(R.id.activity_music_player_play_pause_button);
         mCurrentTimeText = (TextView) findViewById(R.id.activity_music_player_start_time_text);
@@ -63,16 +65,7 @@ public class MusicPlayer extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mMediaPlayer.start();
-                    mCurrentTime = mMediaPlayer.getCurrentPosition();
-                    mEndTime = mMediaPlayer.getDuration();
-                    //Max Progress
-                    mProgressSeek.setMax((int) mEndTime);
-                    mProgressSeek.setProgress((int) mCurrentTime);
-                    myHandler.postDelayed(UpdateSongTime, 100);
-
-                    long mins = TimeUnit.MILLISECONDS.toMinutes((long) mEndTime);
-                    long secs = TimeUnit.MILLISECONDS.toSeconds((long) mEndTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) mEndTime));
-                    mEndTimeText.setText(String.format("%02d", mins) + ":" + String.format("%02d", secs));
+                    mediaPlayerStatus();
                 } else {
                     mMediaPlayer.pause();
                 }
@@ -110,5 +103,32 @@ public class MusicPlayer extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void mediaPlayerStatus() {
+        mCurrentTime = mMediaPlayer.getCurrentPosition();
+        mEndTime = mMediaPlayer.getDuration();
+        //Max Progress
+        mProgressSeek.setMax((int) mEndTime);
+        mProgressSeek.setProgress((int) mCurrentTime);
+
+        //Handler to update progress
+        myHandler.postDelayed(UpdateSongTime, 100);
+
+        long mins = TimeUnit.MILLISECONDS.toMinutes((long) mEndTime);
+        long secs = TimeUnit.MILLISECONDS.toSeconds((long) mEndTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) mEndTime));
+        mEndTimeText.setText(String.format("%02d", mins) + ":" + String.format("%02d", secs));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mMediaPlayer.isPlaying()) {
+            mPlay.setChecked(true);
+            mediaPlayerStatus();
+        } else {
+            mPlay.setChecked(false);
+            mediaPlayerStatus();
+        }
     }
 }
