@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -20,15 +21,25 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.finiteloop.musica.Models.PostModel;
+import com.finiteloop.musica.NetworkUtils.MusicaServerAPICalls;
 import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-public class HomeStreamActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HomeStreamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public RecyclerView recyclerView;
     Toolbar mToolbar;
@@ -42,6 +53,9 @@ public class HomeStreamActivity extends AppCompatActivity {
     CircularImageView mHomeStreamPostProfileImageView;
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private ArrayList<PostModel> homeStreamPostArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +65,14 @@ public class HomeStreamActivity extends AppCompatActivity {
         mContext = this;
         mAuth = FirebaseAuth.getInstance();
 
+        homeStreamPostArrayList=new ArrayList<>();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_home_stream_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.activity_home_stream_navigationView);
         mAddPostCardView = (CardView) findViewById(R.id.activity_home_stream_add_post_card_view);
         mHelloUserText = (TextView) findViewById(R.id.activity_home_stream_hello_user_text);
         mHomeStreamPostProfileImageView = (CircularImageView) findViewById(R.id.activity_home_stream_add_post_profile_pic);
+        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.activity_home_stream_swipe_refresh_layout);
 
         mHelloUserText.setText("Hello " + UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase() + "..Share something with the world");
 
@@ -70,9 +87,18 @@ public class HomeStreamActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                fetchData();
+            }
+        });
+
         recyclerView = (RecyclerView) findViewById(R.id.home_stream_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        recyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext()));
+
 
         mAddPostCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,11 +113,11 @@ public class HomeStreamActivity extends AppCompatActivity {
 
         mNavigationViewHeaderTextUsername.setText(UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase());
         mNavigationViewHeaderTextEmail.setText(UserDataSharedPreference.getEmail(getBaseContext()));
-        Log.d("Path", UserDataSharedPreference.getProfileURL(getBaseContext()).toString());
+      //  Log.d("Path", UserDataSharedPreference.getProfileURL(getBaseContext()).toString());
 
-        Uri uri = Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()));
-        Picasso.with(getApplicationContext()).load(uri).into(mHomeStreamPostProfileImageView);
-        Picasso.with(getApplicationContext()).load(uri).into(mNavigationViewHeaderProfilePic);
+      //  Uri uri = Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()));
+      //  Picasso.with(getApplicationContext()).load(uri).into(mHomeStreamPostProfileImageView);
+      //  Picasso.with(getApplicationContext()).load(uri).into(mNavigationViewHeaderProfilePic);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -170,12 +196,66 @@ public class HomeStreamActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    public void fetchData()
+    {
+        new MusicaServerAPICalls() {
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                if (isSuccessful) {
+                    try {
+                        homeStreamPostArrayList = parseJsonResponse(message);
+                        recyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(),homeStreamPostArrayList));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), "There was an error while loading...", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.getHomeStreamPostOfUser(getBaseContext());
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    // json parsing of the getHomeStreamPostOfUser Api call
+    public ArrayList<PostModel> parseJsonResponse(String response) throws JSONException {
+        ArrayList<PostModel> arrayList = new ArrayList<>();
+
+        JSONObject root = new JSONObject(response);
+        JSONArray data = root.getJSONArray("data");
+        for(int i=0;i<data.length();i++)
+        {
+            PostModel postModel=new PostModel();
+            JSONObject post = data.getJSONObject(i);
+            JSONArray no_of_likes = post.getJSONArray("user_like");
+            JSONArray no_of_loves = post.getJSONArray("user_love");
+
+            postModel.setGenreTag(post.getString("post_genre_tag"));
+            postModel.setTitle(post.getString("post_title"));
+            postModel.setNo_of_likes(no_of_likes.length()+"");
+            postModel.setNo_of_loves(no_of_loves.length()+"");
+            postModel.setPost_pic_url(post.getString("post_album_pic"));
+            arrayList.add(postModel);
+        }
+        return arrayList;
+    }
+
+    @Override
+    public void onRefresh() {
+        fetchData();
+    }
+
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
         Context mContext;
+        private List<PostModel> homeStreamPostOfUser;
 
-        public RecyclerViewAdapter(Context context) {
+        public RecyclerViewAdapter(Context context, List<PostModel> homeStreamPostOfUser) {
             mContext = context;
+            this.homeStreamPostOfUser=homeStreamPostOfUser;
         }
 
         @Override
@@ -186,20 +266,52 @@ public class HomeStreamActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+         if(homeStreamPostOfUser!=null){
+             PostModel postModel = homeStreamPostOfUser.get(position);
+             holder.mTitle.setText(postModel.getTitle());
+             holder.mGenreTag.setText(postModel.getGenreTag());
+             holder.no_of_likes.setText(postModel.getNo_of_likes() + " Likes");
+             holder.no_of_loves.setText(postModel.getNo_of_loves() + " Loves");
+             if(postModel.getPost_pic_url().isEmpty())
+             {
+                 holder.post_imageView.setImageResource(R.drawable.mountain_pic2);
+             }
+             else{
+                 Picasso.with(getBaseContext()).load(postModel.getPost_pic_url()).into(holder.post_imageView);
+             }
+         }
+
         }
 
         @Override
         public int getItemCount() {
-            return 8;
+           return homeStreamPostOfUser.size();
         }
     }
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder  implements  View.OnClickListener{
 
         TextView mUserName;
+        TextView mGenreTag;
+        TextView mTitle;
+        TextView no_of_likes;
+        TextView no_of_loves;
+        ImageView post_imageView;
+
         public RecyclerViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mUserName = (TextView) itemView.findViewById(R.id.activity_home_stream_post_user_name_text);
+            mGenreTag = (TextView) itemView.findViewById(R.id.activity_home_stream_genre_tag);
+            mTitle = (TextView) itemView.findViewById(R.id.activity_home_stream_title);
+            no_of_likes = (TextView) itemView.findViewById(R.id.activity_home_stream_no_of_likes);
+            no_of_loves = (TextView) itemView.findViewById(R.id.activity_home_stream_no_of_loves);
+            post_imageView = (ImageView) itemView.findViewById(R.id.activity_home_stream_cardView1_picture);
+        }
+
+        @Override
+        public void onClick(View view) {
+
         }
     }
 

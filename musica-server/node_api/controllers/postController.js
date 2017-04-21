@@ -31,7 +31,7 @@ module.exports = function(server){
 		// if (errors) {
 		// 	helpers.failure(res,next,errors,404);
 		// }
-		var post_model= new PostModel();
+		var post_model = new PostModel();
 		post_model.email_address=req.params.email_address;
 		post_model.post_title=req.params.post_title;
 		post_model.post_info=req.params.post_info;
@@ -118,6 +118,50 @@ module.exports = function(server){
      });
      //helpers.success(res,next,user);
    });
+  });
+
+  // route to get the posts of a user and the user following from the database (posts to be displayed on homeStream)
+  server.get("/user/post/homestream/:email_address",function(req,res,next){
+    req.assert('email_address','Email Address is required').notEmpty().isEmail();
+    var errors = req.validationErrors();
+    if (errors) {
+      helpers.failure(res,next,errors[0],400);
+    }
+    PostModel.find({email_address: req.params.email_address }, function (err, posts) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+      }
+      if(posts === null || posts.length === 0){
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      }
+
+      //find the user followed by finding its user following list
+          UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
+          if(err) {
+            helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+          }
+          if(user === null){
+            helpers.failure(res,next,'The specified user cannot be found in the database',404);
+          }
+          else{
+            var following_users=user.following;
+            for (var i=0;i<following_users.length;i++){
+                      PostModel.find({email_address: following_users[i] }, function (err, temp) {
+                      if(err) {
+                        helpers.failure(res,next,'Something went wrong while fetching user post from the database',500);
+                      }
+                      if(temp === null || temp.length ===0){
+                        //helpers.failure(res,next,'This User haven\'t posted anything',404);
+                      }
+                      else {
+                        posts.push(temp);
+                      }
+                    });           
+            }
+          }
+        });
+          helpers.success(res,next,posts);
+    });
   });
 
 }

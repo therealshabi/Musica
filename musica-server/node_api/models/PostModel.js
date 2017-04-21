@@ -11,7 +11,8 @@ var PostSchema = new Schema({
     post_genre_tag     : String,
     user_like     : [String],
     user_love     : [String],
-    post_album_pic     : String
+    post_album_pic     : String,
+    post_song_url : String
 });
 
 // users here is the collection(table) name that we are

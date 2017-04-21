@@ -15,6 +15,6 @@ setupController(server,restify,restifyValidator);
 userController(server);
 postController(server);
 
-server.listen(22222,"192.168.0.4", function(){
+server.listen(22222,"192.168.1.110", function(){
   console.log('%s listening at %s', server.name, server.url);
 });
