@@ -77,6 +77,20 @@ module.exports = function(server){
 		});
 	});
 
+//Route for Searching User based on substring or prefix for Search Activity
+	server.get('/user/search/:name_prefix',function(req, res, next){
+		var name = req.params.name_prefix;
+		UserModel.find({user_name: new RegExp('^'+name, "i")}, function(err, users) {
+			if(err) {
+				helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+			}
+			if(users === null || users.length===0){
+				helpers.failure(res,next,'No User found',404);
+			}
+			helpers.success(res,next,users);
+		});
+	});
+
 	// // route to update the user followers list
 	// server.put("/followers/:email_address",function(req,res,next){
 	// 	req.assert('email_address','Email Address is required').notEmpty().isEmail();
