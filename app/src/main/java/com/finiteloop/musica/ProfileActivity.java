@@ -2,12 +2,9 @@ package com.finiteloop.musica;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.finiteloop.musica.Models.ProfileAlbums;
 
@@ -30,6 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     Toolbar mToolbar;
     CollapsingToolbarLayout mCollapsingToolbar;
+    ToggleButton mFollowButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.profile_activity_recycler_view);
         mToolbar = (Toolbar) findViewById(R.id.profile_activity_toolbar);
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profile_activity_collapsing_toolbar);
+        mFollowButton = (ToggleButton) findViewById(R.id.activity_profile_follow_button);
 
         setSupportActionBar(mToolbar);
 

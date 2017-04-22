@@ -11,6 +11,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.finiteloop.musica.MusicPlayerUtils.MusicPlayerSingleton;
+
 import java.util.concurrent.TimeUnit;
 
 public class MusicPlayer extends AppCompatActivity {

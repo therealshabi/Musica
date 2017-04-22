@@ -98,13 +98,19 @@
 
     </RelativeLayout>
 
-
-    <android.support.design.widget.FloatingActionButton
+    <ToggleButton
+        android:id="@+id/activity_profile_follow_button"
         android:layout_width="100dp"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:layout_marginRight="20dp"
+        android:background="@drawable/follow_button_drawable"
+        android:checked="false"
         android:elevation="24dp"
-        android:src="@drawable/ic_person_white_24dp"
+        android:text="Follow"
+        android:textColor="@android:color/white"
+        android:textOff="Follow"
+        android:textOn="Following"
+        android:visibility="gone"
         app:elevation="16dp"
         app:layout_anchor="@id/profile_activity_collapsing_toolbar"
         app:layout_anchorGravity="bottom|right" />

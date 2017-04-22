@@ -1,4 +1,4 @@
-package com.finiteloop.musica;
+package com.finiteloop.musica.MusicPlayerUtils;
 
 import android.content.Context;
 import android.media.MediaPlayer;
