@@ -3,7 +3,7 @@ var UserModel = require('../models/UserModel.js');
 var PostModel = require('../models/PostModel.js');
 
 
-module.exports = function(server){
+module.exports = function(server, async_query){
 
   // route to get the posts of a particular user from the database
   server.get("/user/post/:email_address",function(req,res,next){
@@ -169,16 +169,19 @@ module.exports = function(server){
      });
    });
   });
- 
+
+  var calls = [];
+
   // HomeStreamPost Part-2
   // route to get the homeStream post of a particular user
   server.get("/user/homeStreamPost/:email_address",function(req,res,next){
+    var result=[];
     req.assert('email_address','Email Address is required').notEmpty().isEmail();
     var errors = req.validationErrors();
-    var result=[]
     if (errors) {
       helpers.failure(res,next,errors[0],400);
     }
+
     UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
       if(err) {
         helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
@@ -186,30 +189,31 @@ module.exports = function(server){
       if(user === null) {
         helpers.failure(res,next,'This user does not exist',404);
       }
-      else{
-        console.log(user.user_name);
-        for(var i=0;i<user.following_post.length;i++){
-               PostModel.findOne({ _id: user.following_post[i] }, function (err, post) {
-               if(err) {
-                 helpers.failure(res,next,'Something went wrong while fetching from the database',500);
-               }
-               if(post === null){
-                 helpers.failure(res,next,'The specified user cannot be found in the database',404);
-               }
-               else{
-                result.push(post);
-                console.log(result);
-                /*if(i === 1){
+
+      var f_posts = user.following_post;
+
+      var pushDoc = function(item, callback) {
+                if(item) {
+                  PostModel.findOne({ _id: item}, function(err, post) {
+
+                    if(post != null) {
+                      result.push(post);
+                      //Return to function which called this function
+                      callback();
+                    }
+                    else callback();
+                  });
+                }
+              };
+
+//This function will call callback for each user following list to pushDoc function
+              async_query.forEach(f_posts, pushDoc , function(err) {
+                //err will be generated when finished traversing the error
+                if(err)
+                  console.log(err);
                   helpers.success(res,next,result);
-                }*/
-               }
-             });
-        }
-           helpers.success(res,next,result);
-     }
+              });
 
     });
-  });
-
-
+});
 }
