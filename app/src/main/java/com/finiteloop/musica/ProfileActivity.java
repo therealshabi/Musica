@@ -56,16 +56,6 @@ public class ProfileActivity extends AppCompatActivity {
         mProfileName = (TextView) findViewById(R.id.profile_activity_profile_name);
         mProfilePic = (CircularImageView) findViewById(R.id.profile_activity_profile_pic);
 
-        if (!mUsername.equals(UserDataSharedPreference.getUsername(getBaseContext()))) {
-            mFollowButton.setVisibility(View.VISIBLE);
-        } else {
-            mFollowButton.setVisibility(View.GONE);
-        }
-
-        mProfileName.setText(mUsername);
-
-        Picasso.with(getBaseContext()).load(Uri.parse(mProfilePicUrl)).into(mProfilePic);
-
         setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
@@ -122,6 +112,20 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!mUsername.equals(UserDataSharedPreference.getUsername(getBaseContext()))) {
+            mFollowButton.setVisibility(View.VISIBLE);
+        } else {
+            mFollowButton.setVisibility(View.GONE);
+        }
+
+        mProfileName.setText(mUsername);
+
+        Picasso.with(getBaseContext()).load(Uri.parse(mProfilePicUrl)).into(mProfilePic);
     }
 
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {

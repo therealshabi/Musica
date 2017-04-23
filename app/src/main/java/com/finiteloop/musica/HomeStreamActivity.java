@@ -118,7 +118,10 @@ public class HomeStreamActivity extends AppCompatActivity {
                     }
                     case R.id.navigation_menu_profile: {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
-                        startActivity(new Intent(HomeStreamActivity.this, ProfileActivity.class));
+                        Intent i = new Intent(HomeStreamActivity.this, ProfileActivity.class);
+                        i.putExtra("Username", UserDataSharedPreference.getUsername(getBaseContext()));
+                        i.putExtra("Profile Pic", UserDataSharedPreference.getProfileURL(getBaseContext()));
+                        startActivity(i);
                         return true;
                     }
                     case R.id.navigation_menu_report_and_feedback: {
