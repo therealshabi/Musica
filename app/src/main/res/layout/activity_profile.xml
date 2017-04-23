@@ -110,7 +110,6 @@
         android:textColor="@android:color/white"
         android:textOff="Follow"
         android:textOn="Following"
-        android:visibility="gone"
         app:elevation="16dp"
         app:layout_anchor="@id/profile_activity_collapsing_toolbar"
         app:layout_anchorGravity="bottom|right" />

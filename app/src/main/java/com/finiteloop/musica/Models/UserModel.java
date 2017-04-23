@@ -13,8 +13,8 @@ public class UserModel {
     String password;
     String userInfo;
     String profilePicUrl;
-    ArrayList<UserModel> followerList;
-    ArrayList<UserModel> followingList;
+    ArrayList<String> followerList;
+    ArrayList<String> followingList;
 
     public String getId() {
         return id;
@@ -64,19 +64,19 @@ public class UserModel {
         this.profilePicUrl = profilePicUrl;
     }
 
-    public ArrayList<UserModel> getFollowerList() {
+    public ArrayList<String> getFollowerList() {
         return followerList;
     }
 
-    public void setFollowerList(ArrayList<UserModel> followerList) {
+    public void setFollowerList(ArrayList<String> followerList) {
         this.followerList = followerList;
     }
 
-    public ArrayList<UserModel> getFollowingList() {
+    public ArrayList<String> getFollowingList() {
         return followingList;
     }
 
-    public void setFollowingList(ArrayList<UserModel> followingList) {
+    public void setFollowingList(ArrayList<String> followingList) {
         this.followingList = followingList;
     }
 }

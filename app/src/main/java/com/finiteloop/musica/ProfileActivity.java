@@ -2,6 +2,7 @@ package com.finiteloop.musica;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,9 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.finiteloop.musica.Models.ProfileAlbums;
+import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,17 +33,38 @@ public class ProfileActivity extends AppCompatActivity {
     Toolbar mToolbar;
     CollapsingToolbarLayout mCollapsingToolbar;
     ToggleButton mFollowButton;
+    TextView mProfileName;
+    CircularImageView mProfilePic;
+    String mUsername;
+    String mProfilePicUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        mUsername = getIntent().getStringExtra("Username");
+        mProfilePicUrl = getIntent().getStringExtra("Profile Pic");
+
+        // Log.d("Profile Username",mUsername);
+
         mCoverPic = (ImageView) findViewById(R.id.profile_activity_cover_pic);
         mRecyclerView = (RecyclerView) findViewById(R.id.profile_activity_recycler_view);
         mToolbar = (Toolbar) findViewById(R.id.profile_activity_toolbar);
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profile_activity_collapsing_toolbar);
         mFollowButton = (ToggleButton) findViewById(R.id.activity_profile_follow_button);
+        mProfileName = (TextView) findViewById(R.id.profile_activity_profile_name);
+        mProfilePic = (CircularImageView) findViewById(R.id.profile_activity_profile_pic);
+
+        if (!mUsername.equals(UserDataSharedPreference.getUsername(getBaseContext()))) {
+            mFollowButton.setVisibility(View.VISIBLE);
+        } else {
+            mFollowButton.setVisibility(View.GONE);
+        }
+
+        mProfileName.setText(mUsername);
+
+        Picasso.with(getBaseContext()).load(Uri.parse(mProfilePicUrl)).into(mProfilePic);
 
         setSupportActionBar(mToolbar);
 

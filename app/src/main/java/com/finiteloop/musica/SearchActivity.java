@@ -1,5 +1,7 @@
 package com.finiteloop.musica;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,7 @@ public class SearchActivity extends AppCompatActivity {
 
     EditText mQueryEditText;
     TextView mNoUserFoundText;
+    Context activityContext;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
 
@@ -57,6 +60,8 @@ public class SearchActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new RecyclerViewAdapter(arr));
+
+        activityContext = this;
 
 
         //RxJava
@@ -94,6 +99,7 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    //Parsing JSON for User Search in Search Activity
     private ArrayList<UserModel> parseData(String message) {
         ArrayList<UserModel> user = new ArrayList<>();
         try {
@@ -114,17 +120,70 @@ public class SearchActivity extends AppCompatActivity {
         return user;
     }
 
+    //Parsing JSON for User user serach based on email
+    private UserModel parseUserData(String message) {
+        UserModel u = new UserModel();
+        try {
+            JSONObject d = new JSONObject(message);
+            u.setUsername(d.getString("user_name"));
+            u.setProfilePicUrl(d.getString("profile_pic"));
+            u.setEmail(d.getString("email_address"));
+            JSONArray st = d.getJSONArray("following");
+            ArrayList<String> following = new ArrayList<>();
+            for (int j = 0; j < st.length(); j++) {
+                following.add(st.getString(j));
+            }
+            u.setFollowingList(following);
+            JSONArray f = d.getJSONArray("followers");
+            ArrayList<String> followers = new ArrayList<>();
+            for (int j = 0; j < f.length(); j++) {
+                followers.add(f.getString(j));
+            }
+            u.setFollowerList(followers);
+            u.setId(d.getString("_id"));
+            u.setUserInfo(d.getString("user_info"));
+            //Log.d("User", u.toString());
+        } catch (JSONException e) {
+            Log.d("Exception", e.getMessage());
+        }
+        //Log.d("User",user.get(0).toString());
+        return u;
+    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mEmailTextView;
         TextView mUsernameTextView;
         ImageView mProfileImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mUsernameTextView = (TextView) itemView.findViewById(R.id.activity_search_username_text);
             mEmailTextView = (TextView) itemView.findViewById(R.id.activity_search_email_text);
             mProfileImageView = (ImageView) itemView.findViewById(R.id.activity_search_profile_image);
+        }
+
+        @Override
+        public void onClick(View v) {
+            String email = mEmailTextView.getText().toString();
+            Log.d("Email", email);
+            new MusicaServerAPICalls() {
+                @Override
+                public void isRequestSuccessful(boolean isSuccessful, String message) {
+                    if (isSuccessful) {
+                        UserModel user = parseUserData(message);
+                        //Log.d("User",user.toString());
+                        Intent i = new Intent(activityContext, ProfileActivity.class);
+                        i.putExtra("Username", user.getUsername());
+                        //Log.d("USer",user.getUsername());
+                        i.putExtra("Profile Pic", user.getProfilePicUrl());
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(getBaseContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }.getUserOnEmail(getBaseContext(), email);
         }
     }
 
