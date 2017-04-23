@@ -25,12 +25,6 @@ module.exports = function(server){
 
   // post route to post a post from a particular user
 	server.post("/posts",function(req,res,next){
-		// req.assert('email_address','Email address is required and must be a valid email ').notEmpty().isEmail();
-		//
-		// var errors = req.validationErrors();
-		// if (errors) {
-		// 	helpers.failure(res,next,errors,404);
-		// }
 		var post_model = new PostModel();
 		post_model.email_address=req.params.email_address;
 		post_model.post_title=req.params.post_title;
@@ -71,23 +65,22 @@ module.exports = function(server){
    if (errors) {
      helpers.failure(res,next,errors,404);
    }
-   PostModel.findOne({ id: req.params.id }, function (err, post) {
+   PostModel.findOne({ _id: req.params.id }, function (err, post) {
      if(err) {
        helpers.failure(res,next,'Something went wrong while fetching from the database',500);
      }
      if(post === null){
        helpers.failure(res,next,'The specified user cannot be found in the database',404);
      }
-     user_like.push(req.params.user_liked_email_address);
+     post.user_like.push(req.params.user_liked_email_address);
      post.save(function(err) {
        if(err) {
          helpers.failure(res,next,'The user cannot be added into the database',500);
        }
        else {
-         helpers.success(res,next,user);
+         helpers.success(res,next,post);
        }
      });
-     //helpers.success(res,next,user);
    });
   });
 
@@ -100,68 +93,123 @@ module.exports = function(server){
      helpers.failure(res,next,errors,404);
    }
 
-   PostModel.findOne({ id: req.params.id }, function (err, post) {
+   PostModel.findOne({ _id: req.params.id }, function (err, post) {
      if(err) {
        helpers.failure(res,next,'Something went wrong while fetching from the database',500);
      }
      if(post === null){
        helpers.failure(res,next,'The specified user cannot be found in the database',404);
      }
-     user_love.push(req.params.user_loved_email_address);
+     post.user_love.push(req.params.user_loved_email_address);
      post.save(function(err) {
        if(err) {
          helpers.failure(res,next,'The user cannot be added into the database',500);
        }
        else {
-         helpers.success(res,next,user);
+         helpers.success(res,next,post);
        }
      });
-     //helpers.success(res,next,user);
    });
   });
 
-  // route to get the posts of a user and the user following from the database (posts to be displayed on homeStream)
-  server.get("/user/post/homestream/:email_address",function(req,res,next){
+
+  // route to update the user liked post (unliking the post)
+  server.put("/post/unlike/:id",function(req,res,next){
+   req.assert('id','Id is required').notEmpty();
+
+   var errors = req.validationErrors();
+   if (errors) {
+     helpers.failure(res,next,errors,404);
+   }
+   PostModel.findOne({ _id: req.params.id }, function (err, post) {
+     if(err) {
+       helpers.failure(res,next,'Something went wrong while fetching from the database',500);
+     }
+     if(post === null){
+       helpers.failure(res,next,'The specified user cannot be found in the database',404);
+     }
+     var index = post.user_like.indexOf(req.params.user_liked_email_address);
+     post.user_like.splice(index,1);
+     post.save(function(err) {
+       if(err) {
+         helpers.failure(res,next,'The user cannot be added into the database',500);
+       }
+       else {
+         helpers.success(res,next,post);
+       }
+     });
+   });
+  });
+
+
+  // route to update the user loved post (unloving the post)
+  server.put("/post/unlove/:id",function(req,res,next){
+   req.assert('id','Id is required').notEmpty();
+
+   var errors = req.validationErrors();
+   if (errors) {
+     helpers.failure(res,next,errors,404);
+   }
+   PostModel.findOne({ _id: req.params.id }, function (err, post) {
+     if(err) {
+       helpers.failure(res,next,'Something went wrong while fetching from the database',500);
+     }
+     if(post === null){
+       helpers.failure(res,next,'The specified user cannot be found in the database',404);
+     }
+     var index = post.user_love.indexOf(req.params.user_loved_email_address);
+     post.user_love.splice(index,1);
+     post.save(function(err) {
+       if(err) {
+         helpers.failure(res,next,'The user cannot be added into the database',500);
+       }
+       else {
+         helpers.success(res,next,post);
+       }
+     });
+   });
+  });
+ 
+  // HomeStreamPost Part-2
+  // route to get the homeStream post of a particular user
+  server.get("/user/homeStreamPost/:email_address",function(req,res,next){
     req.assert('email_address','Email Address is required').notEmpty().isEmail();
     var errors = req.validationErrors();
+    var result=[]
     if (errors) {
       helpers.failure(res,next,errors[0],400);
     }
-    PostModel.find({email_address: req.params.email_address }, function (err, posts) {
+    UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
       if(err) {
         helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
       }
-      if(posts === null || posts.length === 0){
-        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      if(user === null) {
+        helpers.failure(res,next,'This user does not exist',404);
       }
+      else{
+        console.log(user.user_name);
+        for(var i=0;i<user.following_post.length;i++){
+               PostModel.findOne({ _id: user.following_post[i] }, function (err, post) {
+               if(err) {
+                 helpers.failure(res,next,'Something went wrong while fetching from the database',500);
+               }
+               if(post === null){
+                 helpers.failure(res,next,'The specified user cannot be found in the database',404);
+               }
+               else{
+                result.push(post);
+                console.log(result);
+                /*if(i === 1){
+                  helpers.success(res,next,result);
+                }*/
+               }
+             });
+        }
+           helpers.success(res,next,result);
+     }
 
-      //find the user followed by finding its user following list
-          UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
-          if(err) {
-            helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
-          }
-          if(user === null){
-            helpers.failure(res,next,'The specified user cannot be found in the database',404);
-          }
-          else{
-            var following_users=user.following;
-            for (var i=0;i<following_users.length;i++){
-                      PostModel.find({email_address: following_users[i] }, function (err, temp) {
-                      if(err) {
-                        helpers.failure(res,next,'Something went wrong while fetching user post from the database',500);
-                      }
-                      if(temp === null || temp.length ===0){
-                        //helpers.failure(res,next,'This User haven\'t posted anything',404);
-                      }
-                      else {
-                        posts.push(temp);
-                      }
-                    });           
-            }
-          }
-        });
-          helpers.success(res,next,posts);
     });
   });
+
 
 }

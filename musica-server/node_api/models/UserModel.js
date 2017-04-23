@@ -12,8 +12,9 @@ var UserSchema = new Schema({
     profile_pic     : String,
     cover_pic     : String,
     posts : [String],
+    following_post : [String],
     followers     : [String],
-    following     : [String],
+    following     : [String]
 });
 
 // users here is the collection(table) name that we are

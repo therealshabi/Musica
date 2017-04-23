@@ -77,34 +77,7 @@ module.exports = function(server){
 		});
 	});
 
-	// // route to update the user followers list
-	// server.put("/followers/:email_address",function(req,res,next){
-	// 	req.assert('email_address','Email Address is required').notEmpty().isEmail();
-	//
-	// 	var errors = req.validationErrors();
-	// 	if (errors) {
-	// 		helpers.failure(res,next,errors,404);
-	// 	}
-	// 	UserModel.findOne({ email_address: req.params.email_address }, function (err, user) {
-	// 		if(err) {
-	// 			helpers.failure(res,next,'Something went wrong while fetching from the database',500);
-	// 		}
-	// 		if(user === null){
-	// 			helpers.failure(res,next,'The specified user cannot be found in the database',404);
-	// 		}
-	// 		user.followers.push(req.params.follower_email_address);
-	// 		user.save(function(err) {
-	// 			if(err) {
-	// 				helpers.failure(res,next,'The user cannot be added into the database',500);
-	// 			}
-	// 			else {
-	// 				helpers.success(res,next,user);
-	// 			}
-	// 		});
-	// 		//helpers.success(res,next,user);
-	// 	});
-	// });
-
+	
 	// route to update the user following list
 	server.put("/following/:email_address",function(req,res,next){
 		req.assert('email_address','Email Address is required').notEmpty().isEmail();
@@ -165,4 +138,42 @@ module.exports = function(server){
 			});
 		});
 	});
+ 
+  // route once the user follows someone then their post comes into the user.following_post array
+  server.put("/user/following/post/updated/:email_address",function(req,res,next){
+    req.assert('email_address','Email Address is required').notEmpty().isEmail();
+    var errors = req.validationErrors();
+    if (errors) {
+      helpers.failure(res,next,errors[0],400);
+    }
+    UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+      }
+      else{
+      	PostModel.find({email_address: req.params.following_email_address }, function (err, posts) {
+          if(err) {
+            helpers.failure(res,next,'Something went wrong while fetching post from the database',500);
+          }
+          if(posts === null || posts.length === 0){
+            helpers.failure(res,next,'The specified user has not posted anything ',404);
+          }
+          else{
+          	for(var i=0;i<posts.length;i++){
+          		user.following_post.push(posts[i]._id);	
+          	}
+  
+    	      user.save(function(err) {
+				if(err){
+				helpers.failure(res,next,err,500);
+				}
+				helpers.success(res,next,user.following_post);
+			});
+          }
+        });	
+      }	
+    });
+  });
+
+
 }
