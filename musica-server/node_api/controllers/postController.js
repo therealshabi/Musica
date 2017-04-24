@@ -170,9 +170,7 @@ module.exports = function(server, async_query){
    });
   });
 
-  var calls = [];
 
-  // HomeStreamPost Part-2
   // route to get the homeStream post of a particular user
   server.get("/user/homeStreamPost/:email_address",function(req,res,next){
     var result=[];
@@ -182,6 +180,17 @@ module.exports = function(server, async_query){
       helpers.failure(res,next,errors[0],400);
     }
 
+    PostModel.find({email_address: req.params.email_address }, function (err, posts) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+      }
+      if(posts === null || posts.length ===0){
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      }
+      result.push(posts);
+    });
+
+
     UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
       if(err) {
         helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
@@ -190,11 +199,11 @@ module.exports = function(server, async_query){
         helpers.failure(res,next,'This user does not exist',404);
       }
 
-      var f_posts = user.following_post;
+      var f_users = user.following;
 
       var pushDoc = function(item, callback) {
                 if(item) {
-                  PostModel.findOne({ _id: item}, function(err, post) {
+                  PostModel.find({ email_address: item}, function(err, post) {
 
                     if(post != null) {
                       result.push(post);
@@ -207,7 +216,7 @@ module.exports = function(server, async_query){
               };
 
 //This function will call callback for each user following list to pushDoc function
-              async_query.forEach(f_posts, pushDoc , function(err) {
+              async_query.forEach(f_users, pushDoc , function(err) {
                 //err will be generated when finished traversing the error
                 if(err)
                   console.log(err);

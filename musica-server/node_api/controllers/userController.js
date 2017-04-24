@@ -2,7 +2,6 @@ var helpers = require('../config/helperFunctions.js');
 var UserModel = require('../models/UserModel.js');
 var PostModel = require('../models/PostModel.js');
 
-//var k=0;
 
 module.exports = function(server){
 
@@ -138,42 +137,56 @@ module.exports = function(server){
 			});
 		});
 	});
- 
-  // route once the user follows someone then their post comes into the user.following_post array
-  server.put("/user/following/post/updated/:email_address",function(req,res,next){
-    req.assert('email_address','Email Address is required').notEmpty().isEmail();
-    var errors = req.validationErrors();
-    if (errors) {
-      helpers.failure(res,next,errors[0],400);
-    }
-    UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
-      if(err) {
-        helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
-      }
-      else{
-      	PostModel.find({email_address: req.params.following_email_address }, function (err, posts) {
-          if(err) {
-            helpers.failure(res,next,'Something went wrong while fetching post from the database',500);
-          }
-          if(posts === null || posts.length === 0){
-            helpers.failure(res,next,'The specified user has not posted anything ',404);
-          }
-          else{
-          	for(var i=0;i<posts.length;i++){
-          		user.following_post.push(posts[i]._id);	
-          	}
-  
-    	      user.save(function(err) {
-				if(err){
-				helpers.failure(res,next,err,500);
-				}
-				helpers.success(res,next,user.following_post);
-			});
-          }
-        });	
-      }	
-    });
-  });
 
+	// route to update the user following list (unfollow the user)
+	server.put("/unfollowing/:email_address",function(req,res,next){
+		req.assert('email_address','Email Address is required').notEmpty().isEmail();
+
+		var errors = req.validationErrors();
+		if (errors) {
+			helpers.failure(res,next,errors,404);
+		}
+
+		UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
+			if(err) {
+				helpers.failure(res,next,'Something went wrong while fetching from the database',500);
+			}
+			if(user === null){
+				helpers.failure(res,next,'The specified user ' + req.params.email_address +' cannot be found in the database',404);
+			}
+			var index = user.following.indexOf(req.params.follower_email_address);
+			user.following.splice(index,1);
+			user.save(function(err) {
+				if(err) {
+					helpers.failure(res,next,err,500);
+				}
+				else {
+					//If followed successfully then also update the follower list of the user which you've followed
+					UserModel.findOne({email_address: req.params.follower_email_address }, function (err, followingUser) {
+						if(err) {
+							helpers.failure(res,next,'Something went wrong while user fetching from the database',500);
+						}
+						if(followingUser === null){
+							helpers.failure(res,next,'The specified user '+ req.params.follower_email_address +' cannot be found in the database',404);
+				
+						}
+						else{
+						var index = followingUser.followers.indexOf(req.params.email_address);
+						followingUser.followers.splice(index,1);
+						followingUser.save(function(err) {
+							if(err) {
+								helpers.failure(res,next,err,500);
+							}
+							else {
+								helpers.success(res,next,user);
+							}
+						});
+						}
+					});
+				}
+			});
+		});
+	});
+ 
 
 }
