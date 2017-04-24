@@ -2,15 +2,23 @@ package com.finiteloop.musica.NetworkUtils;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.finiteloop.musica.Models.PostModel;
+import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by therealshabi on 17/04/17.
@@ -21,10 +29,19 @@ public abstract class MusicaServerAPICalls {
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
 
+<<<<<<< HEAD
     private static final String SERVER_ADDRESS = "http://192.168.0.6:22222";
     private static final String USER_SIGNUP_POST_REQUEST = SERVER_ADDRESS + "/signup";
     private static final String USER_SEARCH_GET_REQUEST = SERVER_ADDRESS + "/user/search/";
     private static final String USER_EMAIL_GET_REQUEST = SERVER_ADDRESS + "/user/";
+=======
+    private static final String SERVER_ADDRESS = "http://192.168.1.110:22222";
+    private static final String USER_SIGNUP_POST_REQUEST = SERVER_ADDRESS + "/signup";
+    private static final String USER_POST_REQUEST = SERVER_ADDRESS + "/posts";
+    private static String USER_HOMESTREAM_POST_REQUEST = SERVER_ADDRESS + "/user/post/homestream/";
+
+    public ArrayList<PostModel> homeStreamPostArrayList;
+>>>>>>> 0fa3f7f6d99e1cbcbac712f976be98e911a3a072
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 
@@ -54,14 +71,23 @@ public abstract class MusicaServerAPICalls {
         Volley.newRequestQueue(context).add(request);
     }
 
+<<<<<<< HEAD
     public void searchUserRequest(Context context, String queryUser) {
         String queryURL = USER_SEARCH_GET_REQUEST + queryUser;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryURL, new Response.Listener<JSONObject>() {
+=======
+    public void submitPostByUser(Context context, JSONObject post){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, USER_POST_REQUEST, post, new Response.Listener<JSONObject>() {
+>>>>>>> 0fa3f7f6d99e1cbcbac712f976be98e911a3a072
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+<<<<<<< HEAD
                         isRequestSuccessful(true, response.getString(JSON_DATA));
+=======
+                        isRequestSuccessful(true, SUCCESS_STATUS);
+>>>>>>> 0fa3f7f6d99e1cbcbac712f976be98e911a3a072
                     } else {
                         isRequestSuccessful(false, response.getString(JSON_STATUS));
                     }
@@ -74,6 +100,7 @@ public abstract class MusicaServerAPICalls {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+<<<<<<< HEAD
                 isRequestSuccessful(false, null);
             }
         });
@@ -96,15 +123,50 @@ public abstract class MusicaServerAPICalls {
                     e.printStackTrace();
                     isRequestSuccessful(false, null);
                     Log.d("Exception", e.toString());
+=======
+                isRequestSuccessful(false,null);
+            }
+        });
+        Volley.newRequestQueue(context).add(jsonObjectRequest);
+    }
+
+    public void getHomeStreamPostOfUser(final Context context){
+        USER_HOMESTREAM_POST_REQUEST += UserDataSharedPreference.getEmail(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_HOMESTREAM_POST_REQUEST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    Log.d("RESPONSE_TEXT", response);
+                    JSONObject obj = new JSONObject(response);
+                    if (obj.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, response);
+                    } else {
+                        isRequestSuccessful(false, obj.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+>>>>>>> 0fa3f7f6d99e1cbcbac712f976be98e911a3a072
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+<<<<<<< HEAD
                 isRequestSuccessful(false, null);
             }
         });
 
         Volley.newRequestQueue(context).add(request);
     }
+=======
+                Toast.makeText(context,"Error while fetching post from the database",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
+    }
+
+>>>>>>> 0fa3f7f6d99e1cbcbac712f976be98e911a3a072
 }

@@ -109,6 +109,7 @@
                         android:layout_marginLeft="12dp"
                         android:layout_marginTop="8dp"
                         android:text="827 likes"
+                        android:id="@+id/activity_home_stream_no_of_likes"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
@@ -130,6 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="12dp"
                         android:text="827 loves"
+                        android:id="@+id/activity_home_stream_no_of_loves"
                         android:textColor="@android:color/black" />
 
                 </LinearLayout>

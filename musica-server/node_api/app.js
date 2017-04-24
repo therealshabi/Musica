@@ -6,6 +6,7 @@ var postController = require('./controllers/postController.js');
 var restifyValidator = require('restify-validator');
 var config = require('./config/dbConnection.js');
 var mongoose = require('mongoose');
+var async_query = require('async');
 
 mongoose.connect(config.getMongoConnection() ,function(err) {
   if (err)
@@ -13,8 +14,8 @@ mongoose.connect(config.getMongoConnection() ,function(err) {
 });
 setupController(server,restify,restifyValidator);
 userController(server);
-postController(server);
+postController(server,async_query);
 
-server.listen(22222,"192.168.0.6", function(){
+server.listen(22222,"172.20.10.3", function(){
   console.log('%s listening at %s', server.name, server.url);
 });
