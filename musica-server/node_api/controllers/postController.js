@@ -187,18 +187,18 @@ module.exports = function(server, async_query){
       if(posts === null || posts.length ===0){
         helpers.failure(res,next,'This User haven\'t posted anything',404);
       }
-      result.push(posts);
+      for(var i=0;i<posts.length;i++)
+      {
+          result.push(posts[i]);
+      }
 
-
-
-
-      UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
-        if(err) {
-          helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
-        }
-        if(user === null) {
-          helpers.failure(res,next,'This user does not exist',404);
-        }
+       UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+      }
+      if(user === null) {
+        helpers.failure(res,next,'This user does not exist',404);
+      }
 
         var f_users = user.following;
 
@@ -206,15 +206,18 @@ module.exports = function(server, async_query){
                   if(item) {
                     PostModel.find({ email_address: item}, function(err, post) {
 
-                      if(post != null) {
-                        result.push(post);
-                        //Return to function which called this function
-                        callback();
+                    if(post != null) {
+                      for(var i=0;i<post.length;i++)
+                      {
+                          result.push(post[i]);
                       }
-                      else callback();
-                    });
-                  }
-                };
+                      //Return to function which called this function
+                      callback();
+                    }
+                    else callback();
+                  });
+                }
+              };
 
   //This function will call callback for each user following list to pushDoc function
                 async_query.forEach(f_users, pushDoc , function(err) {
@@ -227,5 +230,6 @@ module.exports = function(server, async_query){
       });
 
     });
+
 });
 }

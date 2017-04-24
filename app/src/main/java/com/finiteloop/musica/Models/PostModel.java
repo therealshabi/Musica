@@ -6,6 +6,7 @@ package com.finiteloop.musica.Models;
 
 public class PostModel {
 
+    String post_id;
     String genreTag;
     String title;
     String post_pic_url;
@@ -13,6 +14,8 @@ public class PostModel {
     String no_of_loves;
 
     // getter methods
+
+    public String getPost_id() {return post_id;}
     public String getGenreTag() {
         return genreTag;
     }
@@ -30,7 +33,9 @@ public class PostModel {
     }
 
     // setter methods
-    public void setTitle(String description) {
+
+    public void setPost_id(String post_id) {this.post_id = post_id;}
+    public void setTitle(String title) {
         this.title = title;
     }
     public void setGenreTag(String genreTag) {

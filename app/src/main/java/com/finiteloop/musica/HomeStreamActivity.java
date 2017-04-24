@@ -29,6 +29,8 @@ import com.finiteloop.musica.NetworkUtils.MusicaServerAPICalls;
 import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -54,7 +56,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
     private NavigationView navigationView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private ArrayList<PostModel> homeStreamPostArrayList;
+    public ArrayList<PostModel> homeStreamPostArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,6 +211,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             public void isRequestSuccessful(boolean isSuccessful, String message) {
                 if (isSuccessful) {
                     try {
+                        homeStreamPostArrayList.clear();
                         homeStreamPostArrayList = parseJsonResponse(message);
                         recyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(),homeStreamPostArrayList));
 
@@ -237,6 +240,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             JSONArray no_of_likes = post.getJSONArray("user_like");
             JSONArray no_of_loves = post.getJSONArray("user_love");
 
+            postModel.setPost_id(post.getString("_id"));
             postModel.setGenreTag(post.getString("post_genre_tag"));
             postModel.setTitle(post.getString("post_title"));
             postModel.setNo_of_likes(no_of_likes.length()+"");
@@ -261,9 +265,9 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
         Context mContext;
-        private List<PostModel> homeStreamPostOfUser;
+        private ArrayList<PostModel> homeStreamPostOfUser;
 
-        public RecyclerViewAdapter(Context context, List<PostModel> homeStreamPostOfUser) {
+        public RecyclerViewAdapter(Context context, ArrayList<PostModel> homeStreamPostOfUser) {
             mContext = context;
             this.homeStreamPostOfUser=homeStreamPostOfUser;
         }
@@ -289,8 +293,32 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
              else{
                  Picasso.with(getBaseContext()).load(postModel.getPost_pic_url()).into(holder.post_imageView);
              }
-         }
 
+             holder.likeButton.setOnLikeListener(new OnLikeListener() {
+                 @Override
+                 public void liked(LikeButton likeButton) {
+
+                 }
+
+                 @Override
+                 public void unLiked(LikeButton likeButton) {
+
+                 }
+             });
+
+             holder.loveButton.setOnLikeListener(new OnLikeListener() {
+                 @Override
+                 public void liked(LikeButton likeButton) {
+
+                 }
+
+                 @Override
+                 public void unLiked(LikeButton likeButton) {
+
+                 }
+             });
+
+         }
         }
 
         @Override
@@ -307,6 +335,8 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         TextView no_of_likes;
         TextView no_of_loves;
         ImageView post_imageView;
+        LikeButton likeButton;
+        LikeButton loveButton;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -317,6 +347,8 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             no_of_likes = (TextView) itemView.findViewById(R.id.activity_home_stream_no_of_likes);
             no_of_loves = (TextView) itemView.findViewById(R.id.activity_home_stream_no_of_loves);
             post_imageView = (ImageView) itemView.findViewById(R.id.activity_home_stream_cardView1_picture);
+            likeButton = (LikeButton) itemView.findViewById(R.id.thumb);
+            loveButton = (LikeButton) itemView.findViewById(R.id.like);
         }
 
         @Override
