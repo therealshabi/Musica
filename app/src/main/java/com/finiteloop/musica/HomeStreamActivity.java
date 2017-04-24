@@ -272,9 +272,9 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         }
 
         @Override
-        public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+        public void onBindViewHolder(final RecyclerViewHolder holder, final int position) {
          if(homeStreamPostOfUser!=null){
-             PostModel postModel = homeStreamPostOfUser.get(position);
+             final PostModel postModel = homeStreamPostOfUser.get(position);
              holder.mTitle.setText(postModel.getTitle());
              holder.mGenreTag.setText(postModel.getGenreTag());
              holder.no_of_likes.setText(postModel.getNo_of_likes() + " Likes");
@@ -290,7 +290,22 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
              holder.likeButton.setOnLikeListener(new OnLikeListener() {
                  @Override
                  public void liked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
 
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while liking the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitLikeByUser(getBaseContext(),jsonObject,postModel.getPost_id());
                  }
 
                  @Override
@@ -302,7 +317,22 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
              holder.loveButton.setOnLikeListener(new OnLikeListener() {
                  @Override
                  public void liked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
 
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while loving the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitLoveByUser(getBaseContext(),jsonObject,postModel.getPost_id());
                  }
 
                  @Override
