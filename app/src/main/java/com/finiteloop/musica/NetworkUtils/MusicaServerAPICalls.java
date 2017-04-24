@@ -12,13 +12,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.finiteloop.musica.Models.PostModel;
 import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by therealshabi on 17/04/17.
@@ -170,7 +167,7 @@ public abstract class MusicaServerAPICalls {
             @Override
             public void onErrorResponse(VolleyError error) {
                 isRequestSuccessful(false, null);
-                Toast.makeText(context,"Error while fetching post from the database " + error,Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Error while fetching post from the database " + error, Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,6 +32,7 @@ public class AddPostActivity extends AppCompatActivity {
     EditText post_song_url;
     EditText post_image_url;
     String item; //for spinner
+    JSONObject jsonObject;
 
     ProgressDialog progressDialog;
 
@@ -67,9 +67,9 @@ public class AddPostActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(),UserDataSharedPreference.getEmail(getBaseContext())+"",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), UserDataSharedPreference.getEmail(getBaseContext()) + "", Toast.LENGTH_SHORT).show();
                 progressDialog.show();
-                JSONObject jsonObject=new JSONObject();
+                jsonObject = new JSONObject();
                 try {
                     jsonObject.put("email_address", UserDataSharedPreference.getEmail(getBaseContext()));
                     jsonObject.put("post_title",post_title.getText().toString());
@@ -77,6 +77,8 @@ public class AddPostActivity extends AppCompatActivity {
                     jsonObject.put("post_genre_tag",item);
                     jsonObject.put("post_album_pic",post_image_url.getText().toString());
                     jsonObject.put("post_song_url",post_song_url.getText().toString());
+                    jsonObject.put("user_profile_pic", UserDataSharedPreference.getProfileURL(getBaseContext()));
+                    jsonObject.put("username", UserDataSharedPreference.getUsername(getBaseContext()));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
