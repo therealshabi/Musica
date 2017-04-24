@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_profile_description"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:orientation="vertical"
     tools:context="com.finiteloop.musica.ProfileDescriptionActivity">
+
+    <LinearLayout
+        android:id="@+id/activity_profile_description"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
     <com.github.siyamed.shapeimageview.CircularImageView
@@ -25,16 +29,31 @@
         android:textColor="@android:color/white"
         android:textSize="35sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:text="Snowboarder, superhero, writer. Sometimes I work at Google as Executive Chairman"
-        android:textAlignment="center"
-        android:textColor="@android:color/white" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="0.8"
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="Snowboarder, superhero, writer. Sometimes I work at Google as Executive Chairman"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="0.2"
+                android:src="@drawable/ic_edit_white_24dp" />
+
+        </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -139,4 +158,5 @@
         android:text="Follow"
         android:textColor="@android:color/white" />
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
