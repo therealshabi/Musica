@@ -16,7 +16,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,6 +112,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         mNavigationViewHeaderTextUsername.setText(UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase());
         mNavigationViewHeaderTextEmail.setText(UserDataSharedPreference.getEmail(getBaseContext()));
+        Picasso.with(getBaseContext()).load(Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()))).into(mNavigationViewHeaderProfilePic);
       //  Log.d("Path", UserDataSharedPreference.getProfileURL(getBaseContext()).toString());
 
       //  Uri uri = Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()));
@@ -166,6 +166,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mAuth.signOut();
+                                UserDataSharedPreference.removeAllSharedPreferences(getBaseContext());
                                 mDrawerLayout.closeDrawer(GravityCompat.START);
                                 finish();
                                 startActivity(new Intent(HomeStreamActivity.this, SignInActivity.class));
@@ -251,6 +252,12 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         fetchData();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Picasso.with(getBaseContext()).load(Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()))).into(mHomeStreamPostProfileImageView);
+    }
+
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
         Context mContext;
@@ -317,5 +324,4 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         }
     }
-
 }

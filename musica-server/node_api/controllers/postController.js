@@ -188,40 +188,43 @@ module.exports = function(server, async_query){
         helpers.failure(res,next,'This User haven\'t posted anything',404);
       }
       result.push(posts);
-    });
 
 
-    UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
-      if(err) {
-        helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
-      }
-      if(user === null) {
-        helpers.failure(res,next,'This user does not exist',404);
-      }
 
-      var f_users = user.following;
 
-      var pushDoc = function(item, callback) {
-                if(item) {
-                  PostModel.find({ email_address: item}, function(err, post) {
+      UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
+        if(err) {
+          helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+        }
+        if(user === null) {
+          helpers.failure(res,next,'This user does not exist',404);
+        }
 
-                    if(post != null) {
-                      result.push(post);
-                      //Return to function which called this function
-                      callback();
-                    }
-                    else callback();
-                  });
-                }
-              };
+        var f_users = user.following;
 
-//This function will call callback for each user following list to pushDoc function
-              async_query.forEach(f_users, pushDoc , function(err) {
-                //err will be generated when finished traversing the error
-                if(err)
-                  console.log(err);
-                  helpers.success(res,next,result);
-              });
+        var pushDoc = function(item, callback) {
+                  if(item) {
+                    PostModel.find({ email_address: item}, function(err, post) {
+
+                      if(post != null) {
+                        result.push(post);
+                        //Return to function which called this function
+                        callback();
+                      }
+                      else callback();
+                    });
+                  }
+                };
+
+  //This function will call callback for each user following list to pushDoc function
+                async_query.forEach(f_users, pushDoc , function(err) {
+                  //err will be generated when finished traversing the error
+                  if(err)
+                    console.log(err);
+                    helpers.success(res,next,result);
+                });
+
+      });
 
     });
 });

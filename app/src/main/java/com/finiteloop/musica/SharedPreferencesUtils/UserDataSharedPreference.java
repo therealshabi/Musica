@@ -12,6 +12,7 @@ public class UserDataSharedPreference {
     private static final String SHARED_PREFERENCES_USERNAME = "username";
     private static final String SHARED_PREFERENCES_EMAIL = "email";
     private static final String SHARED_PREFERENCES_PROFILE_PIC_URL = "profile_pic";
+    private static final String SHARED_PREFERENCES_DESCRIPTION = "description";
 
     /**
      * Change the Username in SharedPreferences
@@ -86,5 +87,39 @@ public class UserDataSharedPreference {
         //Get shared preferences file
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
         return sharedPreferences.getString(SHARED_PREFERENCES_PROFILE_PIC_URL, null);
+    }
+
+    /**
+     * Change the Description in SharedPreferences
+     */
+    public static void setDescription(Context context, String description) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        //Get editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        //Add username
+        editor.putString(SHARED_PREFERENCES_DESCRIPTION, description);
+
+        editor.commit();
+    }
+
+    /**
+     * Get the Description from SharedPreferences
+     */
+    public static String getDescription(Context context) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SHARED_PREFERENCES_DESCRIPTION, null);
+    }
+
+    public static void removeAllSharedPreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        //Get editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
     }
 }
