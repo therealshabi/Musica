@@ -187,11 +187,12 @@ module.exports = function(server, async_query){
       if(posts === null || posts.length ===0){
         helpers.failure(res,next,'This User haven\'t posted anything',404);
       }
-      result.push(posts);
-    });
+      for(var i=0;i<posts.length;i++)
+      {
+          result.push(posts[i]);  
+      }
 
-
-    UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
+       UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
       if(err) {
         helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
       }
@@ -206,7 +207,10 @@ module.exports = function(server, async_query){
                   PostModel.find({ email_address: item}, function(err, post) {
 
                     if(post != null) {
-                      result.push(post);
+                      for(var i=0;i<post.length;i++)
+                      {
+                          result.push(post[i]);  
+                      }
                       //Return to function which called this function
                       callback();
                     }
@@ -224,5 +228,8 @@ module.exports = function(server, async_query){
               });
 
     });
+      
+    });
+   
 });
 }

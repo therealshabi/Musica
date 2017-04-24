@@ -67,7 +67,7 @@ public class AddPostActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(UserDataSharedPreference.getEmail(getBaseContext()),"hello shivam");
+                Toast.makeText(getBaseContext(),UserDataSharedPreference.getEmail(getBaseContext())+"",Toast.LENGTH_SHORT).show();
                 progressDialog.show();
                 JSONObject jsonObject=new JSONObject();
                 try {
