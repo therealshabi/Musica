@@ -29,7 +29,7 @@ public abstract class MusicaServerAPICalls {
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
 
-    private static final String SERVER_ADDRESS = "http://192.168.1.110:22222";
+    private static final String SERVER_ADDRESS = "http://192.168.43.40:22222";
     private static final String USER_SIGNUP_POST_REQUEST = SERVER_ADDRESS + "/signup";
     private static final String USER_SEARCH_GET_REQUEST = SERVER_ADDRESS + "/user/search/";
     private static final String USER_EMAIL_GET_REQUEST = SERVER_ADDRESS + "/user/";
@@ -42,6 +42,8 @@ public abstract class MusicaServerAPICalls {
     private static final String GET_EMAIL_POST_LIKE_REQUEST = SERVER_ADDRESS + "/user/post/like/email/";
     private static final String GET_EMAIL_POST_LOVE_REQUEST = SERVER_ADDRESS + "/user/post/love/email/";
 
+    private static final String USER_DESCRIPTION_POST = SERVER_ADDRESS + "/user/description";
+    private static final String USER_DESCRIPTION_GET = SERVER_ADDRESS + "/user/description/";
 
 
     //public ArrayList<PostModel> homeStreamPostArrayList;
@@ -187,6 +189,57 @@ public abstract class MusicaServerAPICalls {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
 
+    }
+
+    //To update User's Profile description
+    public void postUserProfileDescription(Context context, JSONObject userDescription) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, USER_DESCRIPTION_POST, userDescription, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, SUCCESS_STATUS);
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                    Log.d("Exception", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
+
+        Volley.newRequestQueue(context).add(request);
+    }
+
+    public void getUserDescription(Context context) {
+        String queryURL = USER_DESCRIPTION_GET + UserDataSharedPreference.getEmail(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryURL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, response.getString(JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Volley.newRequestQueue(context).add(request);
     }
 
 

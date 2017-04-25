@@ -16,7 +16,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,11 +38,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeStreamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public RecyclerView recyclerView;
+    public ArrayList<PostModel> homeStreamPostArrayList;
     Toolbar mToolbar;
     FirebaseAuth mAuth;
     CardView mAddPostCardView;
@@ -56,8 +55,6 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    public ArrayList<PostModel> homeStreamPostArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +112,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         mNavigationViewHeaderTextUsername.setText(UserDataSharedPreference.getUsername(getBaseContext()).toUpperCase());
         mNavigationViewHeaderTextEmail.setText(UserDataSharedPreference.getEmail(getBaseContext()));
+        Picasso.with(getBaseContext()).load(Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()))).into(mNavigationViewHeaderProfilePic);
       //  Log.d("Path", UserDataSharedPreference.getProfileURL(getBaseContext()).toString());
 
       //  Uri uri = Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()));
@@ -168,6 +166,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mAuth.signOut();
+                                UserDataSharedPreference.removeAllSharedPreferences(getBaseContext());
                                 mDrawerLayout.closeDrawer(GravityCompat.START);
                                 finish();
                                 startActivity(new Intent(HomeStreamActivity.this, SignInActivity.class));
@@ -245,6 +244,9 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             postModel.setNo_of_likes(no_of_likes.length()+"");
             postModel.setNo_of_loves(no_of_loves.length()+"");
             postModel.setPost_pic_url(post.getString("post_album_pic"));
+            postModel.setUser_profile_pic(post.getString("user_profile_pic"));
+            postModel.setUsername(post.getString("username"));
+            // postModel.setTimeStamp(post.getString("post_time_stamp"));
             arrayList.add(postModel);
         }
         return arrayList;
@@ -253,6 +255,12 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
     @Override
     public void onRefresh() {
         fetchData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Picasso.with(getBaseContext()).load(Uri.parse(UserDataSharedPreference.getProfileURL(getBaseContext()))).into(mHomeStreamPostProfileImageView);
     }
 
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
@@ -284,8 +292,16 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                  holder.post_imageView.setImageResource(R.drawable.mountain_pic2);
              }
              else{
-                 Picasso.with(getBaseContext()).load(postModel.getPost_pic_url()).into(holder.post_imageView);
+                 Picasso.with(getBaseContext()).load(Uri.parse(postModel.getPost_pic_url())).into(holder.post_imageView);
              }
+
+             if (postModel.getUser_profile_pic().isEmpty()) {
+                 holder.post_imageView.setImageResource(R.drawable.ic_social);
+             } else {
+                 Picasso.with(getBaseContext()).load(Uri.parse(postModel.getUser_profile_pic())).into(holder.profileImage);
+             }
+
+             holder.mUserName.setText(postModel.getUsername());
 
              holder.likeButton.setOnLikeListener(new OnLikeListener() {
                  @Override
@@ -358,6 +374,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         TextView no_of_likes;
         TextView no_of_loves;
         ImageView post_imageView;
+        CircularImageView profileImage;
         LikeButton likeButton;
         LikeButton loveButton;
 
@@ -370,6 +387,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             no_of_likes = (TextView) itemView.findViewById(R.id.activity_home_stream_no_of_likes);
             no_of_loves = (TextView) itemView.findViewById(R.id.activity_home_stream_no_of_loves);
             post_imageView = (ImageView) itemView.findViewById(R.id.activity_home_stream_cardView1_picture);
+            profileImage = (CircularImageView) itemView.findViewById(R.id.activity_home_stream_card_profile);
             likeButton = (LikeButton) itemView.findViewById(R.id.thumb);
             loveButton = (LikeButton) itemView.findViewById(R.id.like);
         }
@@ -379,5 +397,4 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         }
     }
-
 }

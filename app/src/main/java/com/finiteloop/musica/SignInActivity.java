@@ -2,6 +2,7 @@ package com.finiteloop.musica;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +30,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -41,6 +45,7 @@ public class SignInActivity extends AppCompatActivity {
     String username, password, email;
     CoordinatorLayout mCoordinatorLayout;
     String mailId;
+    StorageReference mStorageReference;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -48,6 +53,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         mAuth = FirebaseAuth.getInstance();
+        mStorageReference = FirebaseStorage.getInstance().getReference();
 
         mSignUp = (LinearLayout) findViewById(R.id.activity_sign_in_sign_up_text);
         mSignIn = (Button) findViewById(R.id.activity_sign_in_button);
@@ -115,7 +121,14 @@ public class SignInActivity extends AppCompatActivity {
                     mProgressDialog.dismiss();
                     UserDataSharedPreference.setUsername(getBaseContext(), username);
                     UserDataSharedPreference.setEmail(getBaseContext(), mailId);
-                    startActivity(new Intent(SignInActivity.this, HomeStreamActivity.class));
+                    mStorageReference.child("Users").child(username).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Log.d("IMG URL", uri.toString());
+                            UserDataSharedPreference.setProfilePicURL(getBaseContext(), uri.toString());
+                            startActivity(new Intent(SignInActivity.this, HomeStreamActivity.class));
+                        }
+                    });
                 } else {
                     Log.d("Error", task.getException().getMessage());
                     mProgressDialog.dismiss();

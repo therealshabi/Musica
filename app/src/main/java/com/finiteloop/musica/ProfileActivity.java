@@ -85,7 +85,10 @@ public class ProfileActivity extends AppCompatActivity {
         mCollapsingToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ProfileActivity.this, ProfileDescriptionActivity.class));
+                Intent i = new Intent(ProfileActivity.this, ProfileDescriptionActivity.class);
+                i.putExtra("Username", mUsername);
+                i.putExtra("Profile Pic", mProfilePicUrl);
+                startActivity(i);
             }
         });
 

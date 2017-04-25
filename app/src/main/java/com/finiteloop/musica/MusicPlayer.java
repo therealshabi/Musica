@@ -55,7 +55,7 @@ public class MusicPlayer extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
         }
 
-        mMediaPlayer = MusicPlayerSingleton.getInstance(this, R.raw.coldplay);
+        mMediaPlayer = MusicPlayerSingleton.getInstance(getApplicationContext(), R.raw.coldplay);
         // mMediaPlayer = MediaPlayer.create(this, R.raw.coldplay);
         mProgressSeek = (SeekBar) findViewById(R.id.activity_music_player_song_progress);
         mPlay = (ToggleButton) findViewById(R.id.activity_music_player_play_pause_button);

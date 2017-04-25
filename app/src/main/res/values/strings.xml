@@ -20,4 +20,5 @@
     <string name="reportAndFeedback">Report and Feedback</string>
     <string name="signout">Sign Out</string>
     <string name="addPostTextHomeStream">Hello User..Share something with the world</string>
+    <string name="edit_profile_profile_description">Edit Profile</string>
 </resources>

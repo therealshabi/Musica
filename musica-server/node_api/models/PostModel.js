@@ -6,6 +6,8 @@ var Schema = mongoose.Schema,
 var PostSchema = new Schema({
     id    : ObjectId,
     email_address     : String,
+    user_profile_pic : String,
+    username : String,
     post_title     : String,
     post_info     : String,
     post_genre_tag     : String,
