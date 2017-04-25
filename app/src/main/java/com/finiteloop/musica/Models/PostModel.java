@@ -14,6 +14,15 @@ public class PostModel {
     String no_of_loves;
     String user_profile_pic;
     String username;
+    String timeStamp;
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
     public String getUsername() {
         return username;

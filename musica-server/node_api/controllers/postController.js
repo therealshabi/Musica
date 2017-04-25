@@ -32,6 +32,7 @@ module.exports = function(server, async_query){
 		post_model.post_genre_tag=req.params.post_genre_tag;
     post_model.user_profile_pic = req.params.user_profile_pic;
     post_model.username = req.params.username;
+    post_model.post_time_stamp = req.params.post_time_stamp;
 		post_model.user_like=[];
 		post_model.user_love=[];
 		post_model.post_album_pic=req.params.post_album_pic;

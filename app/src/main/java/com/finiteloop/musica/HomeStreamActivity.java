@@ -246,6 +246,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             postModel.setPost_pic_url(post.getString("post_album_pic"));
             postModel.setUser_profile_pic(post.getString("user_profile_pic"));
             postModel.setUsername(post.getString("username"));
+            // postModel.setTimeStamp(post.getString("post_time_stamp"));
             arrayList.add(postModel);
         }
         return arrayList;
