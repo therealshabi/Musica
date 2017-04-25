@@ -29,7 +29,7 @@ public abstract class MusicaServerAPICalls {
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
 
-    private static final String SERVER_ADDRESS = "http://192.168.43.40:22222";
+    private static final String SERVER_ADDRESS = "http://192.168.1.110:22222";
     private static final String USER_SIGNUP_POST_REQUEST = SERVER_ADDRESS + "/signup";
     private static final String USER_SEARCH_GET_REQUEST = SERVER_ADDRESS + "/user/search/";
     private static final String USER_EMAIL_GET_REQUEST = SERVER_ADDRESS + "/user/";
@@ -37,6 +37,10 @@ public abstract class MusicaServerAPICalls {
     private static final String USER_POST_REQUEST = SERVER_ADDRESS + "/posts";
     private static final String POST_LIKE_REQUEST = SERVER_ADDRESS + "/post/like/";
     private static final String POST_LOVE_REQUEST = SERVER_ADDRESS + "/post/love/";
+    private static final String POST_UNLIKE_REQUEST = SERVER_ADDRESS + "/post/unlike/";
+    private static final String POST_UNLOVE_REQUEST = SERVER_ADDRESS + "/post/unlove/";
+    private static final String GET_EMAIL_POST_LIKE_REQUEST = SERVER_ADDRESS + "/user/post/like/email/";
+    private static final String GET_EMAIL_POST_LOVE_REQUEST = SERVER_ADDRESS + "/user/post/love/email/";
 
 
 
@@ -238,6 +242,124 @@ public abstract class MusicaServerAPICalls {
         });
 
         Volley.newRequestQueue(context).add(jsonObjectRequest);
+    }
+
+
+    public void submitUnLikeByUser(Context context, JSONObject details,String id){
+        String query = POST_UNLIKE_REQUEST + id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, query, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, SUCCESS_STATUS);
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                    Log.d("Exception", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonObjectRequest);
+    }
+
+    public void submitUnLoveByUser(Context context, JSONObject details,String id){
+        String query = POST_UNLOVE_REQUEST + id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, query, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, SUCCESS_STATUS);
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                    Log.d("Exception", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonObjectRequest);
+    }
+
+    public void getEmailOfUserWhoLikedPost(final Context context, String id){
+        String query = GET_EMAIL_POST_LIKE_REQUEST + id;
+        Log.d("URL: ",query);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, query, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    if (obj.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, response);
+                    } else {
+                        isRequestSuccessful(false, obj.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+                Toast.makeText(context,"Error while fetching email from the database " + error,Toast.LENGTH_SHORT).show();
+                Log.d("Error is : ",error+"");
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
+    }
+
+
+    public void getEmailOfUserWhoLovedPost(final Context context, String id){
+        String query = GET_EMAIL_POST_LOVE_REQUEST + id;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, query, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    if (obj.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, response);
+                    } else {
+                        isRequestSuccessful(false, obj.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+                Toast.makeText(context,"Error while fetching email from the database " + error,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
     }
 
 
