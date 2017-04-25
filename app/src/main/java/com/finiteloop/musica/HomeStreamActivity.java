@@ -303,7 +303,58 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
              holder.mUserName.setText(postModel.getUsername());
 
+
+
+             new MusicaServerAPICalls() {
+                 @Override
+                 public void isRequestSuccessful(boolean isSuccessful, String message) {
+                     if (isSuccessful) {
+                             ArrayList<String> emailAddress = new ArrayList<>();
+                         try {
+                             emailAddress = parseJsonEmailAddressResponse(message);
+                         } catch (JSONException e) {
+                             e.printStackTrace();
+                         }
+                         if(emailAddress.contains(UserDataSharedPreference.getEmail(getBaseContext()))){
+                             holder.likeButton.setLiked(true);
+                         } else{
+                            holder.likeButton.setLiked(false);
+                         }
+
+                     } else {
+                         Toast.makeText(getBaseContext(), "There was an error while updating like status...", Toast.LENGTH_SHORT).show();
+                     }
+                 }
+             }.getEmailOfUserWhoLikedPost(getBaseContext(),postModel.getPost_id());
+
+
+
+             new MusicaServerAPICalls() {
+                 @Override
+                 public void isRequestSuccessful(boolean isSuccessful, String message) {
+                     if (isSuccessful) {
+                         ArrayList<String> emailAddress = new ArrayList<>();
+                         try {
+                             emailAddress = parseJsonEmailAddressResponse(message);
+                         } catch (JSONException e) {
+                             e.printStackTrace();
+                         }
+                         if(emailAddress.contains(UserDataSharedPreference.getEmail(getBaseContext()))){
+                             holder.loveButton.setLiked(true);
+                         } else{
+                             holder.loveButton.setLiked(false);
+                         }
+
+                     } else {
+                         Toast.makeText(getBaseContext(), "There was an error while updating love status...", Toast.LENGTH_SHORT).show();
+                     }
+                 }
+             }.getEmailOfUserWhoLovedPost(getBaseContext(),postModel.getPost_id());
+
+
              holder.likeButton.setOnLikeListener(new OnLikeListener() {
+
+
                  @Override
                  public void liked(LikeButton likeButton) {
                      JSONObject jsonObject = new JSONObject();
@@ -324,13 +375,30 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                      }.submitLikeByUser(getBaseContext(),jsonObject,postModel.getPost_id());
                  }
 
+
                  @Override
                  public void unLiked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
 
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while unliking the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitUnLikeByUser(getBaseContext(),jsonObject,postModel.getPost_id());
                  }
              });
 
              holder.loveButton.setOnLikeListener(new OnLikeListener() {
+
                  @Override
                  public void liked(LikeButton likeButton) {
                      JSONObject jsonObject = new JSONObject();
@@ -351,13 +419,40 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                      }.submitLoveByUser(getBaseContext(),jsonObject,postModel.getPost_id());
                  }
 
+
                  @Override
                  public void unLiked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
 
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while unloving the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitUnLoveByUser(getBaseContext(),jsonObject,postModel.getPost_id());
                  }
              });
 
          }
+        }
+
+        private ArrayList<String> parseJsonEmailAddressResponse(String message) throws JSONException {
+            ArrayList<String> temp = new ArrayList<>();
+            JSONObject root = new JSONObject(message);
+            JSONArray data = root.getJSONArray("data");
+            for(int i=0;i<data.length();i++){
+                String value = data.getString(i);
+                temp.add(value);
+            }
+            return temp;
         }
 
         @Override
