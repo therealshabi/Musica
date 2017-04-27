@@ -15,6 +15,15 @@ public class PostModel {
     String user_profile_pic;
     String username;
     String timeStamp;
+    String postURL;
+
+    public String getPostURL() {
+        return postURL;
+    }
+
+    public void setPostURL(String postURL) {
+        this.postURL = postURL;
+    }
 
     public String getTimeStamp() {
         return timeStamp;

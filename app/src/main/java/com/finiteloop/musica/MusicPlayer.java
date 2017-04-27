@@ -1,44 +1,32 @@
 package com.finiteloop.musica;
 
+import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
-import android.widget.SeekBar;
+import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+import android.widget.VideoView;
 
 import com.finiteloop.musica.MusicPlayerUtils.MusicPlayerSingleton;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
-import java.util.concurrent.TimeUnit;
-
-public class MusicPlayer extends AppCompatActivity {
+public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     Toolbar mToolbar;
     MediaPlayer mMediaPlayer;
-    TextView mCurrentTimeText;
-    TextView mEndTimeText;
-    ToggleButton mPlay;
-    SeekBar mProgressSeek;
-    double mCurrentTime = 0.0;
-    double mEndTime = 0.0;
-
-    Handler myHandler = new Handler();
-    private Runnable UpdateSongTime = new Runnable() {
-        public void run() {
-            mCurrentTime = mMediaPlayer.getCurrentPosition();
-
-            long mins = TimeUnit.MILLISECONDS.toMinutes((long) mCurrentTime);
-            long secs = TimeUnit.MILLISECONDS.toSeconds((long) mCurrentTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) mCurrentTime));
-
-            mProgressSeek.setProgress((int) mCurrentTime);
-            myHandler.postDelayed(this, 100);
-            mCurrentTimeText.setText(String.format("%02d", mins) + ":" + String.format("%02d", secs));
-        }
-    };
+    String mSong;
+    String mCover;
+    String mTitle;
+    VideoView mVideoView;
+    CircularImageView mAlbumPic;
+    MediaController mediaController;
+    TextView mAlbumTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +34,10 @@ public class MusicPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_music_player);
 
         mToolbar = (Toolbar) findViewById(R.id.activity_music_player_toolbar);
+
+        mCover = getIntent().getStringExtra("Cover URL");
+        mSong = getIntent().getStringExtra("Song URL");
+        mTitle = getIntent().getStringExtra("Title");
 
         setSupportActionBar(mToolbar);
 
@@ -55,46 +47,36 @@ public class MusicPlayer extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
         }
 
-        mMediaPlayer = MusicPlayerSingleton.getInstance(getApplicationContext(), R.raw.coldplay);
-        // mMediaPlayer = MediaPlayer.create(this, R.raw.coldplay);
-        mProgressSeek = (SeekBar) findViewById(R.id.activity_music_player_song_progress);
-        mPlay = (ToggleButton) findViewById(R.id.activity_music_player_play_pause_button);
-        mCurrentTimeText = (TextView) findViewById(R.id.activity_music_player_start_time_text);
-        mEndTimeText = (TextView) findViewById(R.id.activity_music_player_end_time_text);
+        mAlbumPic = (CircularImageView) findViewById(R.id.activity_music_player_album_picture);
+        mAlbumTitle = (TextView) findViewById(R.id.activity_music_player_album_name);
 
-        mPlay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mMediaPlayer = MusicPlayerSingleton.getInstance();
+        mMediaPlayer.setOnCompletionListener(this);
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mVideoView = (VideoView) findViewById(R.id.gif_loader);
+
+        mediaController = new MediaController(this);
+        mediaController.setAnchorView(mVideoView);
+
+        try {
+            mMediaPlayer.setDataSource(mSong);
+            mMediaPlayer.setOnPreparedListener(MusicPlayer.this);
+            mMediaPlayer.prepareAsync();
+            String uriPath = "android.resource://com.finiteloop.musica/raw/giphy";
+            Uri uri = Uri.parse(uriPath);
+            mVideoView.setMediaController(null);
+            mVideoView.setVideoURI(uri);
+            mVideoView.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mMediaPlayer.start();
-                    mediaPlayerStatus();
-                } else {
-                    mMediaPlayer.pause();
-                }
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
             }
         });
-
-        mProgressSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mMediaPlayer != null && fromUser) {
-                    mMediaPlayer.seekTo(progress);
-                    mProgressSeek.setProgress(progress);
-                }
-            }
-        });
-
     }
 
     @Override
@@ -102,35 +84,35 @@ public class MusicPlayer extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 supportFinishAfterTransition();
+                mMediaPlayer.reset();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void mediaPlayerStatus() {
-        mCurrentTime = mMediaPlayer.getCurrentPosition();
-        mEndTime = mMediaPlayer.getDuration();
-        //Max Progress
-        mProgressSeek.setMax((int) mEndTime);
-        mProgressSeek.setProgress((int) mCurrentTime);
-
-        //Handler to update progress
-        myHandler.postDelayed(UpdateSongTime, 100);
-
-        long mins = TimeUnit.MILLISECONDS.toMinutes((long) mEndTime);
-        long secs = TimeUnit.MILLISECONDS.toSeconds((long) mEndTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) mEndTime));
-        mEndTimeText.setText(String.format("%02d", mins) + ":" + String.format("%02d", secs));
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        mp.start();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (mMediaPlayer.isPlaying()) {
-            mPlay.setChecked(true);
-            mediaPlayerStatus();
-        } else {
-            mPlay.setChecked(false);
-            mediaPlayerStatus();
-        }
+    public void onCompletion(MediaPlayer mp) {
+        mp.reset();
+        finish();
+        startActivity(new Intent(MusicPlayer.this, HomeStreamActivity.class));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Picasso.with(getApplicationContext()).load(Uri.parse(mCover)).into(mAlbumPic);
+        mAlbumTitle.setText(mTitle);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mMediaPlayer.reset();
+        finish();
     }
 }

@@ -1,6 +1,5 @@
 package com.finiteloop.musica.MusicPlayerUtils;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 
 /**
@@ -14,10 +13,9 @@ public class MusicPlayerSingleton extends MediaPlayer {
 
     }
 
-    public static MediaPlayer getInstance(Context context, int resId) {
+    public static MediaPlayer getInstance() {
         if (musicPlayer == null) {
-            musicPlayer = MediaPlayer.create(context, resId);
-            return musicPlayer;
+            musicPlayer = new MediaPlayer();
         }
         return musicPlayer;
     }

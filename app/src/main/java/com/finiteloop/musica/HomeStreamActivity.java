@@ -246,7 +246,8 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             postModel.setPost_pic_url(post.getString("post_album_pic"));
             postModel.setUser_profile_pic(post.getString("user_profile_pic"));
             postModel.setUsername(post.getString("username"));
-            // postModel.setTimeStamp(post.getString("post_time_stamp"));
+            postModel.setPostURL(post.getString("post_song_url"));
+            postModel.setTimeStamp(post.getString("post_time_stamp"));
             arrayList.add(postModel);
         }
         return arrayList;
@@ -281,53 +282,56 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         @Override
         public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-         if(homeStreamPostOfUser!=null){
-             PostModel postModel = homeStreamPostOfUser.get(position);
-             holder.mTitle.setText(postModel.getTitle());
-             holder.mGenreTag.setText(postModel.getGenreTag());
-             holder.no_of_likes.setText(postModel.getNo_of_likes() + " Likes");
-             holder.no_of_loves.setText(postModel.getNo_of_loves() + " Loves");
-             if(postModel.getPost_pic_url().isEmpty())
-             {
-                 holder.post_imageView.setImageResource(R.drawable.mountain_pic2);
-             }
-             else{
-                 Picasso.with(getBaseContext()).load(Uri.parse(postModel.getPost_pic_url())).into(holder.post_imageView);
-             }
+            if (homeStreamPostOfUser != null) {
+                PostModel postModel = homeStreamPostOfUser.get(position);
+                holder.mTitle.setText(postModel.getTitle());
+                holder.mGenreTag.setText(postModel.getGenreTag());
+                holder.no_of_likes.setText(postModel.getNo_of_likes() + " Likes");
+                holder.no_of_loves.setText(postModel.getNo_of_loves() + " Loves");
+                //Log.d("Image",postModel.getPost_pic_url());
+                if (postModel.getPost_pic_url().isEmpty()) {
+                    holder.post_imageView.setImageResource(R.drawable.mountain_pic2);
+                } else {
+                    Picasso.with(mContext).load(Uri.parse(postModel.getPost_pic_url())).into(holder.post_imageView);
+                }
 
-             if (postModel.getUser_profile_pic().isEmpty()) {
-                 holder.post_imageView.setImageResource(R.drawable.ic_social);
-             } else {
-                 Picasso.with(getBaseContext()).load(Uri.parse(postModel.getUser_profile_pic())).into(holder.profileImage);
-             }
+                if (postModel.getUser_profile_pic().isEmpty()) {
+                    holder.post_imageView.setImageResource(R.drawable.ic_social);
+                } else {
+                    Picasso.with(getBaseContext()).load(Uri.parse(postModel.getUser_profile_pic())).into(holder.profileImage);
+                }
 
-             holder.mUserName.setText(postModel.getUsername());
+                holder.mUserName.setText(postModel.getUsername());
 
-             holder.likeButton.setOnLikeListener(new OnLikeListener() {
-                 @Override
-                 public void liked(LikeButton likeButton) {
+/*                mMusicURL = postModel.getPostURL();
+                mCoverURL = postModel.getPost_pic_url();*/
 
-                 }
+                holder.likeButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
 
-                 @Override
-                 public void unLiked(LikeButton likeButton) {
+                    }
 
-                 }
-             });
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
 
-             holder.loveButton.setOnLikeListener(new OnLikeListener() {
-                 @Override
-                 public void liked(LikeButton likeButton) {
+                    }
+                });
 
-                 }
+                holder.loveButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
 
-                 @Override
-                 public void unLiked(LikeButton likeButton) {
+                    }
 
-                 }
-             });
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
 
-         }
+                    }
+                });
+                holder.bindData(postModel.getPostURL(), postModel.getPost_pic_url(), postModel.getTitle());
+            }
+
         }
 
         @Override
@@ -336,7 +340,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         }
     }
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder  implements  View.OnClickListener{
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mUserName;
         TextView mGenreTag;
@@ -347,6 +351,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         CircularImageView profileImage;
         LikeButton likeButton;
         LikeButton loveButton;
+        String mMusicURL, mCoverURL, mMusicTitle;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -364,7 +369,17 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         @Override
         public void onClick(View view) {
+            Intent i = new Intent(mContext, MusicPlayer.class);
+            i.putExtra("Song URL", mMusicURL);
+            i.putExtra("Cover URL", mCoverURL);
+            i.putExtra("Title", mMusicTitle);
+            startActivity(i);
+        }
 
+        public void bindData(String musicURL, String coverURL, String title) {
+            mMusicURL = musicURL;
+            mCoverURL = coverURL;
+            mMusicTitle = title;
         }
     }
 }

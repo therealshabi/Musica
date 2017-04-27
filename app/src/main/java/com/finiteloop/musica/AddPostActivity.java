@@ -199,7 +199,8 @@ public class AddPostActivity extends AppCompatActivity {
                 }
             });
         } else {
-            mCoverPicPath = Uri.parse("http://www.fuse.tv/image/56fe73a1e05e186b2000009b/768/512/the-boxer-rebellion-ocean-by-ocean-album-cover-full-size.jpg");
+            String uriPath = "android.resource://com.finiteloop.musica/drawable/placeholder";
+            mCoverPicPath = Uri.parse(uriPath);
             mCover.putFile(mCoverPicPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -229,7 +230,7 @@ public class AddPostActivity extends AppCompatActivity {
             jsonObject.put("post_song_url", mPostURL);
             jsonObject.put("user_profile_pic", UserDataSharedPreference.getProfileURL(getBaseContext()));
             jsonObject.put("username", UserDataSharedPreference.getUsername(getBaseContext()));
-            String timeStamp = new SimpleDateFormat("dd/mm/yyyy HH:mm:ss").format(new Date());
+            String timeStamp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
             jsonObject.put("post_time_stamp", timeStamp);
         } catch (JSONException e) {
             e.printStackTrace();

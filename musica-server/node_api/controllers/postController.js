@@ -36,6 +36,7 @@ module.exports = function(server, async_query){
 		post_model.user_like=[];
 		post_model.user_love=[];
 		post_model.post_album_pic=req.params.post_album_pic;
+    post_model.post_song_url = req.params.post_song_url;
 		post_model.save(function(err) {
 			if(err){
 				helpers.failure(res,next,err,500);
