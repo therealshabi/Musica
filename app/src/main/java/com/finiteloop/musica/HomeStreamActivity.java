@@ -441,6 +441,24 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                  }
              });
 
+             holder.no_of_likes.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     Intent intent = new Intent(getBaseContext(),LikeActivity.class);
+                     intent.putExtra("POST_ID",postModel.getPost_id());
+                     startActivity(intent);
+                 }
+             });
+
+             holder.no_of_loves.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     Intent intent = new Intent(getBaseContext(),LoveActivity.class);
+                     intent.putExtra("POST_ID",postModel.getPost_id());
+                     startActivity(intent);
+                 }
+             });
+
          }
         }
 

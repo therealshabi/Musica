@@ -259,7 +259,7 @@ module.exports = function(server, async_query){
                   UserModel.find({ email_address: item}, function(err, temp) {
 
                     if(temp != null) {
-                      result.push(temp[0].user_name);
+                      result.push(temp[0]);
                       //Return to function which called this function
                       callback();
                     }
@@ -304,7 +304,7 @@ module.exports = function(server, async_query){
                   UserModel.find({ email_address: item}, function(err, temp) {
 
                     if(temp != null) {
-                      result.push(temp[0].user_name);
+                      result.push(temp[0]);
                       //Return to function which called this function
                       callback();
                     }
