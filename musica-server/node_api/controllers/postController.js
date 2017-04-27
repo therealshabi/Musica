@@ -235,4 +235,142 @@ module.exports = function(server, async_query){
 
 });
 });
+
+
+  // route to get the username of the users who liked a particular post
+  server.get("/user/post/like/:id",function(req,res,next){
+    req.assert('id','Id is required').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+      helpers.failure(res,next,errors[0],400);
+    }
+    var result=[]
+
+    PostModel.findOne({ _id: req.params.id }, function (err, post) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching post from the database',500);
+      }
+      if(post === null || post.length ===0){
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      }
+      var users=post.user_like;
+
+      var pushDoc = function(item, callback) {
+                if(item) {
+                  UserModel.find({ email_address: item}, function(err, temp) {
+
+                    if(temp != null) {
+                      result.push(temp[0]);
+                      //Return to function which called this function
+                      callback();
+                    }
+                    else callback();
+                  });
+                }
+              };
+
+//This function will call callback for each user following list to pushDoc function
+              async_query.forEach(users, pushDoc , function(err) {
+                //err will be generated when finished traversing the error
+                if(err)
+                  console.log(err);
+                  helpers.success(res,next,result);
+              });
+
+    });
+      
+    });
+
+
+  // route to get the username of the users who loved a particular post
+  server.get("/user/post/love/:id",function(req,res,next){
+    req.assert('id','Id is required').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+      helpers.failure(res,next,errors[0],400);
+    }
+    var result=[]
+
+    PostModel.findOne({ _id: req.params.id }, function (err, post) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching post from the database',500);
+      }
+      if(post === null || post.length ===0){
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      }
+      var users=post.user_love;
+
+      var pushDoc = function(item, callback) {
+                if(item) {
+                  UserModel.find({ email_address: item}, function(err, temp) {
+
+                    if(temp != null) {
+                      result.push(temp[0]);
+                      //Return to function which called this function
+                      callback();
+                    }
+                    else callback();
+                  });
+                }
+              };
+
+//This function will call callback for each user following list to pushDoc function
+              async_query.forEach(users, pushDoc , function(err) {
+                //err will be generated when finished traversing the error
+                if(err)
+                  console.log(err);
+                  helpers.success(res,next,result);
+              });
+
+    });
+      
+    });
+
+
+  // route to get the email address of the users who liked a particular post
+  server.get("/user/post/like/email/:id",function(req,res,next){
+    req.assert('id','Id is required').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+      helpers.failure(res,next,errors[0],400);
+    }
+
+    PostModel.findOne({ _id: req.params.id }, function (err, post) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching post from the database',500);
+      }
+      if(post === null || post.length ===0){
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      }
+      else{
+        helpers.success(res,next,post.user_like);
+      }
+
+      });
+    });
+
+
+  // route to get the email address of the users who loved a particular post
+  server.get("/user/post/love/email/:id",function(req,res,next){
+    req.assert('id','Id is required').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+      helpers.failure(res,next,errors[0],400);
+    }
+
+    PostModel.findOne({ _id: req.params.id }, function (err, post) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching post from the database',500);
+      }
+      if(post === null || post.length ===0){
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      }
+      else{
+        helpers.success(res,next,post.user_love);
+      }
+
+      });
+    });
+
+
 }

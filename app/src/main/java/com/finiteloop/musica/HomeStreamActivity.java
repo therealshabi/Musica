@@ -281,19 +281,20 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         }
 
         @Override
-        public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-            if (homeStreamPostOfUser != null) {
-                PostModel postModel = homeStreamPostOfUser.get(position);
-                holder.mTitle.setText(postModel.getTitle());
-                holder.mGenreTag.setText(postModel.getGenreTag());
-                holder.no_of_likes.setText(postModel.getNo_of_likes() + " Likes");
-                holder.no_of_loves.setText(postModel.getNo_of_loves() + " Loves");
-                //Log.d("Image",postModel.getPost_pic_url());
-                if (postModel.getPost_pic_url().isEmpty()) {
-                    holder.post_imageView.setImageResource(R.drawable.mountain_pic2);
-                } else {
-                    Picasso.with(mContext).load(Uri.parse(postModel.getPost_pic_url())).into(holder.post_imageView);
-                }
+        public void onBindViewHolder(final RecyclerViewHolder holder, final int position) {
+         if(homeStreamPostOfUser!=null){
+             final PostModel postModel = homeStreamPostOfUser.get(position);
+             holder.mTitle.setText(postModel.getTitle());
+             holder.mGenreTag.setText(postModel.getGenreTag());
+             holder.no_of_likes.setText(postModel.getNo_of_likes() + " Likes");
+             holder.no_of_loves.setText(postModel.getNo_of_loves() + " Loves");
+             if(postModel.getPost_pic_url().isEmpty())
+             {
+                 holder.post_imageView.setImageResource(R.drawable.mountain_pic2);
+             }
+             else{
+                 Picasso.with(mContext).load(Uri.parse(postModel.getPost_pic_url())).into(holder.post_imageView);
+             }
 
                 if (postModel.getUser_profile_pic().isEmpty()) {
                     holder.post_imageView.setImageResource(R.drawable.ic_social);
@@ -303,35 +304,174 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                 holder.mUserName.setText(postModel.getUsername());
 
-/*                mMusicURL = postModel.getPostURL();
-                mCoverURL = postModel.getPost_pic_url();*/
 
-                holder.likeButton.setOnLikeListener(new OnLikeListener() {
-                    @Override
-                    public void liked(LikeButton likeButton) {
 
-                    }
+             new MusicaServerAPICalls() {
+                 @Override
+                 public void isRequestSuccessful(boolean isSuccessful, String message) {
+                     if (isSuccessful) {
+                             ArrayList<String> emailAddress = new ArrayList<>();
+                         try {
+                             emailAddress = parseJsonEmailAddressResponse(message);
+                         } catch (JSONException e) {
+                             e.printStackTrace();
+                         }
+                         if(emailAddress.contains(UserDataSharedPreference.getEmail(getBaseContext()))){
+                             holder.likeButton.setLiked(true);
+                         } else{
+                            holder.likeButton.setLiked(false);
+                         }
 
-                    @Override
-                    public void unLiked(LikeButton likeButton) {
+                     } else {
+                         Toast.makeText(getBaseContext(), "There was an error while updating like status...", Toast.LENGTH_SHORT).show();
+                     }
+                 }
+             }.getEmailOfUserWhoLikedPost(getBaseContext(),postModel.getPost_id());
 
-                    }
-                });
 
-                holder.loveButton.setOnLikeListener(new OnLikeListener() {
-                    @Override
-                    public void liked(LikeButton likeButton) {
 
-                    }
+             new MusicaServerAPICalls() {
+                 @Override
+                 public void isRequestSuccessful(boolean isSuccessful, String message) {
+                     if (isSuccessful) {
+                         ArrayList<String> emailAddress = new ArrayList<>();
+                         try {
+                             emailAddress = parseJsonEmailAddressResponse(message);
+                         } catch (JSONException e) {
+                             e.printStackTrace();
+                         }
+                         if(emailAddress.contains(UserDataSharedPreference.getEmail(getBaseContext()))){
+                             holder.loveButton.setLiked(true);
+                         } else{
+                             holder.loveButton.setLiked(false);
+                         }
 
-                    @Override
-                    public void unLiked(LikeButton likeButton) {
+                     } else {
+                         Toast.makeText(getBaseContext(), "There was an error while updating love status...", Toast.LENGTH_SHORT).show();
+                     }
+                 }
+             }.getEmailOfUserWhoLovedPost(getBaseContext(),postModel.getPost_id());
 
-                    }
-                });
-                holder.bindData(postModel.getPostURL(), postModel.getPost_pic_url(), postModel.getTitle());
+
+             holder.likeButton.setOnLikeListener(new OnLikeListener() {
+
+
+                 @Override
+                 public void liked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
+
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while liking the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitLikeByUser(getBaseContext(),jsonObject,postModel.getPost_id());
+                 }
+
+
+                 @Override
+                 public void unLiked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
+
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while unliking the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitUnLikeByUser(getBaseContext(),jsonObject,postModel.getPost_id());
+                 }
+             });
+
+             holder.loveButton.setOnLikeListener(new OnLikeListener() {
+
+                 @Override
+                 public void liked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
+
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while loving the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitLoveByUser(getBaseContext(),jsonObject,postModel.getPost_id());
+                 }
+
+
+                 @Override
+                 public void unLiked(LikeButton likeButton) {
+                     JSONObject jsonObject = new JSONObject();
+                     try {
+                         jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     new MusicaServerAPICalls() {
+                         @Override
+                         public void isRequestSuccessful(boolean isSuccessful, String message) {
+                             if (isSuccessful) {
+
+                             } else {
+                                 Toast.makeText(getBaseContext(), "There was an error while unloving the post...", Toast.LENGTH_SHORT).show();
+                             }
+                         }
+                     }.submitUnLoveByUser(getBaseContext(),jsonObject,postModel.getPost_id());
+                 }
+             });
+
+             holder.no_of_likes.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     Intent intent = new Intent(getBaseContext(),LikeActivity.class);
+                     intent.putExtra("POST_ID",postModel.getPost_id());
+                     startActivity(intent);
+                 }
+             });
+
+             holder.no_of_loves.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     Intent intent = new Intent(getBaseContext(),LoveActivity.class);
+                     intent.putExtra("POST_ID",postModel.getPost_id());
+                     startActivity(intent);
+                 }
+             });
+
+         }
+        }
+
+        private ArrayList<String> parseJsonEmailAddressResponse(String message) throws JSONException {
+            ArrayList<String> temp = new ArrayList<>();
+            JSONObject root = new JSONObject(message);
+            JSONArray data = root.getJSONArray("data");
+            for(int i=0;i<data.length();i++){
+                String value = data.getString(i);
+                temp.add(value);
             }
-
+            return temp;
         }
 
         @Override
