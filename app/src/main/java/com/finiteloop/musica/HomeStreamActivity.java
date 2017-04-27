@@ -460,6 +460,8 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                  }
              });
 
+             holder.bindData(postModel.getPostURL(), postModel.getPost_pic_url(), postModel.getTitle());
+
          }
         }
 
