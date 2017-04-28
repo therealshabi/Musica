@@ -123,10 +123,6 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    /*case R.id.navigation_menu_home: {
-                        Toast.makeText(getBaseContext(), "Home Button Pressed", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }*/
                     case R.id.navigation_menu_explore: {
                         //Toast.makeText(getBaseContext(), "Explore Button Pressed", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -147,6 +143,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                         Intent i = new Intent(HomeStreamActivity.this, ProfileActivity.class);
                         i.putExtra("Username", UserDataSharedPreference.getUsername(getBaseContext()));
                         i.putExtra("Profile Pic", UserDataSharedPreference.getProfileURL(getBaseContext()));
+                        i.putExtra("Email Id", UserDataSharedPreference.getEmail(getBaseContext()));
                         startActivity(i);
                         return true;
                     }

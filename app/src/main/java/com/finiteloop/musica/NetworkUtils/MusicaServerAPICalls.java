@@ -482,8 +482,8 @@ public abstract class MusicaServerAPICalls {
 
     }
 
-    public void getUserPosts(Context context) {
-        String queryURL = GET_USER_POST + UserDataSharedPreference.getEmail(context);
+    public void getUserPosts(Context context, String email) {
+        String queryURL = GET_USER_POST + email;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryURL, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

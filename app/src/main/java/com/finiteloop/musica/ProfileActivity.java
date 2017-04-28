@@ -17,12 +17,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.finiteloop.musica.Models.ProfileAlbums;
+import com.finiteloop.musica.Models.PostModel;
+import com.finiteloop.musica.NetworkUtils.MusicaServerAPICalls;
 import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -37,6 +43,9 @@ public class ProfileActivity extends AppCompatActivity {
     CircularImageView mProfilePic;
     String mUsername;
     String mProfilePicUrl;
+    String mEmailId;
+    ArrayList<PostModel> mProfilePlaylist;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         mUsername = getIntent().getStringExtra("Username");
         mProfilePicUrl = getIntent().getStringExtra("Profile Pic");
-
+        mEmailId = getIntent().getStringExtra("Email Id");
         // Log.d("Profile Username",mUsername);
 
         mCoverPic = (ImageView) findViewById(R.id.profile_activity_cover_pic);
@@ -65,22 +74,24 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
         }
 
+        context = this;
+
         /*Drawable coverPic = getResources().getDrawable(R.drawable.concert);
         coverPic.setAlpha(150);
         mCoverPic.setImageDrawable(coverPic);*/
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
 
-        ArrayList<ProfileAlbums> profileAlbum = new ArrayList<>();
+        mProfilePlaylist = new ArrayList<>();
 
-        profileAlbum.add(new ProfileAlbums("Coldplay", 4, getResources().getDrawable(R.drawable.mountain_pic2)));
+       /* profileAlbum.add(new ProfileAlbums("Coldplay", 4, getResources().getDrawable(R.drawable.mountain_pic2)));
         profileAlbum.add(new ProfileAlbums("Florida Whistle", 1, getResources().getDrawable(R.drawable.mountain_pic2)));
         profileAlbum.add(new ProfileAlbums("One Direction", 2, getResources().getDrawable(R.drawable.mountain_pic2)));
         profileAlbum.add(new ProfileAlbums("Gangnam Style", 5, getResources().getDrawable(R.drawable.mountain_pic2)));
-        profileAlbum.add(new ProfileAlbums("Arijit Singh", 25, getResources().getDrawable(R.drawable.mountain_pic2)));
+        profileAlbum.add(new ProfileAlbums("Arijit Singh", 25, getResources().getDrawable(R.drawable.mountain_pic2)));*/
 
 
-        mRecyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(), profileAlbum));
+        //mRecyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(), profileAlbum));
 
         mCollapsingToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +104,49 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+        new MusicaServerAPICalls() {
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                if (isSuccessful) {
+                    try {
+                        mProfilePlaylist = parseJsonResponse(message);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    mRecyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(), mProfilePlaylist));
+                } else {
+                    Toast.makeText(getApplicationContext(), "There was an error while fetching posts!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.getUserPosts(getApplicationContext(), mEmailId);
+
+
+    }
+
+    private ArrayList<PostModel> parseJsonResponse(String response) throws JSONException {
+        ArrayList<PostModel> arrayList = new ArrayList<>();
+
+        JSONArray data = new JSONArray(response);
+        for (int i = 0; i < data.length(); i++) {
+            PostModel postModel = new PostModel();
+            JSONObject post = data.getJSONObject(i);
+            JSONArray no_of_likes = post.getJSONArray("user_like");
+            JSONArray no_of_loves = post.getJSONArray("user_love");
+
+            postModel.setPost_id(post.getString("_id"));
+            postModel.setGenreTag(post.getString("post_genre_tag"));
+            postModel.setTitle(post.getString("post_title"));
+            postModel.setNo_of_likes(no_of_likes.length() + "");
+            postModel.setNo_of_loves(no_of_loves.length() + "");
+            postModel.setPost_pic_url(post.getString("post_album_pic"));
+            postModel.setUser_profile_pic(post.getString("user_profile_pic"));
+            postModel.setUsername(post.getString("username"));
+            postModel.setPostURL(post.getString("post_song_url"));
+            postModel.setTimeStamp(post.getString("post_time_stamp"));
+            postModel.setPrivatePost(post.getBoolean("private_post"));
+            arrayList.add(postModel);
+        }
+        return arrayList;
     }
 
     @Override
@@ -134,9 +188,9 @@ public class ProfileActivity extends AppCompatActivity {
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
         Context mContext;
-        ArrayList<ProfileAlbums> mProfileAlbum;
+        ArrayList<PostModel> mProfileAlbum;
 
-        public RecyclerViewAdapter(Context context, ArrayList<ProfileAlbums> profileAlbum) {
+        public RecyclerViewAdapter(Context context, ArrayList<PostModel> profileAlbum) {
             this.mContext = context;
             this.mProfileAlbum = profileAlbum;
         }
@@ -149,10 +203,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-            ProfileAlbums temp = mProfileAlbum.get(position);
-            holder.mAlbumName.setText(temp.getAlbumName());
-            holder.mNumOfSongs.setText(temp.getNumOfSongs() + " Songs");
-            holder.mImageView.setImageDrawable(temp.getDrawable());
+            PostModel temp = mProfileAlbum.get(position);
+            holder.mAlbumName.setText(temp.getTitle());
+            Picasso.with(mContext).load(Uri.parse(temp.getPost_pic_url())).into(holder.mAlbumPic);
+            holder.bindData(mProfileAlbum.get(position).getPostURL(), mProfileAlbum.get(position).getPost_pic_url(), mProfileAlbum.get(position).getTitle());
         }
 
         @Override
@@ -163,21 +217,30 @@ public class ProfileActivity extends AppCompatActivity {
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView mImageView;
+        ImageView mAlbumPic;
         TextView mAlbumName;
-        TextView mNumOfSongs;
+        String mMusicURL, mCoverURL, mMusicTitle;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            mImageView = (ImageView) itemView.findViewById(R.id.activity_profile_card_item_album_pic);
+            mAlbumPic = (ImageView) itemView.findViewById(R.id.activity_profile_card_item_album_pic);
             mAlbumName = (TextView) itemView.findViewById(R.id.activity_profile_card_item_album_name);
-            mNumOfSongs = (TextView) itemView.findViewById(R.id.activity_profile_card_item_song_number);
         }
 
         @Override
         public void onClick(View view) {
-            startActivity(new Intent(ProfileActivity.this,PlaylistActivity.class));
+            Intent i = new Intent(context, MusicPlayer.class);
+            i.putExtra("Song URL", mMusicURL);
+            i.putExtra("Cover URL", mCoverURL);
+            i.putExtra("Title", mMusicTitle);
+            startActivity(i);
+        }
+
+        public void bindData(String musicURL, String coverURL, String title) {
+            mMusicURL = musicURL;
+            mCoverURL = coverURL;
+            mMusicTitle = title;
         }
     }
 }

@@ -178,6 +178,7 @@ public class SearchActivity extends AppCompatActivity {
                         i.putExtra("Username", user.getUsername());
                         //Log.d("USer",user.getUsername());
                         i.putExtra("Profile Pic", user.getProfilePicUrl());
+                        i.putExtra("Email Id", user.getEmail());
                         startActivity(i);
                     } else {
                         Toast.makeText(getBaseContext(), "Something went wrong", Toast.LENGTH_SHORT).show();

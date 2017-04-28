@@ -12,7 +12,7 @@ module.exports = function(server, async_query){
     if (errors) {
       helpers.failure(res,next,errors[0],400);
     }
-    PostModel.find({email_address: req.params.email_address }, function (err, posts) {
+    PostModel.find({email_address: req.params.email_address,private_post:false }, function (err, posts) {
       if(err) {
         helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
       }
