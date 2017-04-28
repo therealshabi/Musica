@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/activity_home_stream_card_view_title_linear_layout"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:padding="8dp">
 
                 <LinearLayout
@@ -99,17 +99,19 @@
                     android:padding="4dp">
 
                     <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginTop="12dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="8dp"
+                        android:padding="4dp"
                         android:src="@drawable/ic_thumb_up_blue_300_24dp" />
 
                     <TextView
                         android:id="@+id/activity_home_stream_no_of_likes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="4dp"
+                        android:padding="4dp"
                         android:text="827 likes"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
@@ -122,8 +124,10 @@
                     android:padding="4dp">
 
                     <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="8dp"
+                        android:padding="4dp"
                         android:src="@drawable/ic_heart"
                         android:tint="@android:color/holo_red_dark" />
 
@@ -131,7 +135,9 @@
                         android:id="@+id/activity_home_stream_no_of_loves"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="4dp"
+                        android:padding="4dp"
                         android:text="827 loves"
                         android:textColor="@android:color/black" />
 
@@ -145,7 +151,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/activity_home_stream_card_view_title_linear_layout"
                 android:layout_marginRight="4dp"
-                android:layout_marginTop="16dp"
                 android:elevation="12dp"
                 android:orientation="horizontal"
                 android:padding="4dp">
@@ -154,7 +159,7 @@
                     android:id="@+id/like"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginRight="4dp"
                     android:clickable="true"
                     app:icon_size="20dp"
                     app:icon_type="heart">
@@ -165,7 +170,7 @@
                     android:id="@+id/thumb"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="4dp"
                     android:layout_marginRight="8dp"
                     android:clickable="true"
                     app:icon_size="20dp"
