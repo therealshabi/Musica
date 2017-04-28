@@ -3,8 +3,8 @@ package com.finiteloop.musica;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -14,10 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.finiteloop.musica.Models.PostModel;
 import com.finiteloop.musica.Models.UserModel;
 import com.finiteloop.musica.NetworkUtils.MusicaServerAPICalls;
-import com.finiteloop.musica.SharedPreferencesUtils.UserDataSharedPreference;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -29,8 +27,8 @@ import java.util.ArrayList;
 
 public class LikeActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
     public static String POST_ID="";
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +88,7 @@ public class LikeActivity extends AppCompatActivity {
 
         CircularImageView userProfilePic;
         TextView username;
+        String mUsername, mProfilePicURL;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -100,6 +99,15 @@ public class LikeActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
+            Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
+            intent.putExtra("Username", mUsername);
+            intent.putExtra("Profile Pic", mProfilePicURL);
+            startActivity(intent);
+        }
+
+        public void bindData(String username, String profilePicUrl) {
+            mProfilePicURL = profilePicUrl;
+            mUsername = username;
         }
     }
 
@@ -132,6 +140,8 @@ public class LikeActivity extends AppCompatActivity {
                 else{
                     Picasso.with(getBaseContext()).load(Uri.parse(userModel.getProfilePicUrl())).into(holder.userProfilePic);
                 }
+
+                holder.bindData(userModel.getUsername(), userModel.getProfilePicUrl());
 
             }
         }
