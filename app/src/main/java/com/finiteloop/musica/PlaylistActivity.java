@@ -81,7 +81,7 @@ public class PlaylistActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "There was an error while fetching posts!", Toast.LENGTH_SHORT).show();
                 }
             }
-        }.getUserPosts(getApplicationContext());
+        }.getUserPrivatePosts(getApplicationContext());
 
     }
 
@@ -106,6 +106,7 @@ public class PlaylistActivity extends AppCompatActivity {
             postModel.setUsername(post.getString("username"));
             postModel.setPostURL(post.getString("post_song_url"));
             postModel.setTimeStamp(post.getString("post_time_stamp"));
+            postModel.setPrivatePost(post.getBoolean("private_post"));
             arrayList.add(postModel);
         }
         return arrayList;

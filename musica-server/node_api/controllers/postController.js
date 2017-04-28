@@ -23,6 +23,26 @@ module.exports = function(server, async_query){
     });
   });
 
+  // route to get the private posts of a particular user from the database
+  server.get("/user/post/private/:email_address",function(req,res,next){
+    req.assert('email_address','Email Address is required').notEmpty().isEmail();
+    var errors = req.validationErrors();
+    if (errors) {
+      helpers.failure(res,next,errors[0],400);
+    }
+    PostModel.find({email_address: req.params.email_address, private_post:true}, function (err, posts) {
+      if(err) {
+        helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+      }
+      if(posts === null || posts.length ===0){
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
+      }
+      else{
+      helpers.success(res,next,posts);
+      }
+    });
+  });
+
   // post route to post a post from a particular user
 	server.post("/posts",function(req,res,next){
 		var post_model = new PostModel();
@@ -37,6 +57,7 @@ module.exports = function(server, async_query){
 		post_model.user_love=[];
 		post_model.post_album_pic=req.params.post_album_pic;
     post_model.post_song_url = req.params.post_song_url;
+    post_model.private_post = req.params.private_post;
 		post_model.save(function(err) {
 			if(err){
 				helpers.failure(res,next,err,500);
@@ -184,17 +205,19 @@ module.exports = function(server, async_query){
       helpers.failure(res,next,errors[0],400);
     }
 
-    PostModel.find({email_address: req.params.email_address }, function (err, posts) {
+    PostModel.find({email_address: req.params.email_address , private_post:false}, function (err, posts) {
       if(err) {
         helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
       }
       if(posts === null || posts.length ===0){
-        helpers.failure(res,next,'This User haven\'t posted anything',404);
+        //helpers.failure(res,next,'This User haven\'t posted anything',404);
       }
+      else{
       for(var i=0;i<posts.length;i++)
       {
           result.push(posts[i]);
       }
+    }
 
       UserModel.findOne({email_address: req.params.email_address }, function (err, user) {
         if(err) {
@@ -208,7 +231,7 @@ module.exports = function(server, async_query){
 
         var pushDoc = function(item, callback) {
                   if(item) {
-                    PostModel.find({ email_address: item}, function(err, post) {
+                    PostModel.find({ email_address: item,private_post:false}, function(err, post) {
 
                       if(post != null) {
                         for(var i=0;i<post.length;i++)
@@ -278,7 +301,7 @@ module.exports = function(server, async_query){
               });
 
     });
-      
+
     });
 
 
@@ -323,7 +346,7 @@ module.exports = function(server, async_query){
               });
 
     });
-      
+
     });
 
 

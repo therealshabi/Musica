@@ -207,6 +207,15 @@
 
             </LinearLayout>
 
+            <CheckBox
+                android:id="@+id/activity_add_post_private_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:text="Add as Private Music"
+                android:textColor="@color/colorAccent" />
+
 
             <Button
                 android:id="@+id/activity_add_post_submit_button"
