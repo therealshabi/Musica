@@ -39,6 +39,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.finiteloop.musica.R.id.like;
+
 public class HomeStreamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public RecyclerView recyclerView;
@@ -132,10 +134,6 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                     case R.id.navigation_menu_playlist: {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         startActivity(new Intent(HomeStreamActivity.this, PlaylistActivity.class));
-                        return true;
-                    }
-                    case R.id.navigation_menu_notifications: {
-                        Toast.makeText(getBaseContext(), "Notifications Button Pressed", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                     case R.id.navigation_menu_profile: {
@@ -344,7 +342,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                          }
 
                      } else {
-                         Toast.makeText(getBaseContext(), "There was an error while updating love status...", Toast.LENGTH_SHORT).show();
+                         Toast.makeText(getBaseContext(), "There was an error while updating love status..." + message, Toast.LENGTH_SHORT).show();
                      }
                  }
              }.getEmailOfUserWhoLovedPost(getBaseContext(),postModel.getPost_id());
@@ -355,6 +353,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void liked(LikeButton likeButton) {
+                     String like[] = holder.no_of_likes.getText().toString().split(" ");
+                     int a = Integer.parseInt(like[0]);
+                     holder.no_of_likes.setText((a + 1) + " Likes");
+
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -367,6 +369,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.likeButton.setLiked(Boolean.FALSE);
+                                 String like[] = holder.no_of_likes.getText().toString().split(" ");
+                                 int a = Integer.parseInt(like[0]);
+                                 if (a != 0)
+                                     holder.no_of_likes.setText((a - 1) + " Likes");
                                  Toast.makeText(getBaseContext(), "There was an error while liking the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -376,6 +383,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void unLiked(LikeButton likeButton) {
+                     String like[] = holder.no_of_likes.getText().toString().split(" ");
+                     int a = Integer.parseInt(like[0]);
+                     if (a != 0)
+                         holder.no_of_likes.setText((a - 1) + " Likes");
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -388,6 +399,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.likeButton.setLiked(Boolean.TRUE);
+                                 String like[] = holder.no_of_likes.getText().toString().split(" ");
+                                 int a = Integer.parseInt(like[0]);
+                                 holder.no_of_likes.setText((a + 1) + " Likes");
                                  Toast.makeText(getBaseContext(), "There was an error while unliking the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -399,6 +414,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void liked(LikeButton likeButton) {
+                     String love[] = holder.no_of_loves.getText().toString().split(" ");
+                     int a = Integer.parseInt(love[0]);
+                     holder.no_of_loves.setText((a + 1) + " Loves");
+
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -411,6 +430,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.loveButton.setLiked(Boolean.FALSE);
+                                 String love[] = holder.no_of_loves.getText().toString().split(" ");
+                                 int a = Integer.parseInt(love[0]);
+                                 if (a != 0)
+                                     holder.no_of_loves.setText((a - 1) + " Loves");
                                  Toast.makeText(getBaseContext(), "There was an error while loving the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -420,6 +444,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void unLiked(LikeButton likeButton) {
+                     String love[] = holder.no_of_loves.getText().toString().split(" ");
+                     int a = Integer.parseInt(love[0]);
+                     if (a != 0)
+                         holder.no_of_loves.setText((a - 1) + " Loves");
+
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -432,6 +461,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.loveButton.setLiked(Boolean.TRUE);
+                                 String love[] = holder.no_of_loves.getText().toString().split(" ");
+                                 int a = Integer.parseInt(love[0]);
+                                 holder.no_of_loves.setText((a + 1) + " Loves");
                                  Toast.makeText(getBaseContext(), "There was an error while unloving the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -503,7 +536,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             post_imageView = (ImageView) itemView.findViewById(R.id.activity_home_stream_cardView1_picture);
             profileImage = (CircularImageView) itemView.findViewById(R.id.activity_home_stream_card_profile);
             likeButton = (LikeButton) itemView.findViewById(R.id.thumb);
-            loveButton = (LikeButton) itemView.findViewById(R.id.like);
+            loveButton = (LikeButton) itemView.findViewById(like);
         }
 
         @Override
