@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,6 +101,18 @@ public class ProfileActivity extends AppCompatActivity {
                 i.putExtra("Username", mUsername);
                 i.putExtra("Profile Pic", mProfilePicUrl);
                 startActivity(i);
+            }
+        });
+
+        //Todo
+        mFollowButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                } else {
+
+                }
             }
         });
 
