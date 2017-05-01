@@ -15,6 +15,24 @@ public class PostModel {
     String user_profile_pic;
     String username;
     String timeStamp;
+    String postURL;
+    boolean privatePost;
+
+    public boolean isPrivatePost() {
+        return privatePost;
+    }
+
+    public void setPrivatePost(boolean privatePost) {
+        this.privatePost = privatePost;
+    }
+
+    public String getPostURL() {
+        return postURL;
+    }
+
+    public void setPostURL(String postURL) {
+        this.postURL = postURL;
+    }
 
     public String getTimeStamp() {
         return timeStamp;

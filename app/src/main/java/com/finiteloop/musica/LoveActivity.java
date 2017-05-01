@@ -1,9 +1,10 @@
 package com.finiteloop.musica;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -26,9 +27,8 @@ import java.util.ArrayList;
 
 public class LoveActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
     public static String POST_ID="";
-
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,8 @@ public class LoveActivity extends AppCompatActivity {
 
         CircularImageView userProfilePic;
         TextView username;
+        String mProfilePicURL;
+        String mUsername;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -96,6 +98,15 @@ public class LoveActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
+            Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
+            intent.putExtra("Username", mUsername);
+            intent.putExtra("Profile Pic", mProfilePicURL);
+            startActivity(intent);
+        }
+
+        public void bindData(String username, String profilePicUrl) {
+            mProfilePicURL = profilePicUrl;
+            mUsername = username;
         }
     }
 
@@ -128,7 +139,10 @@ public class LoveActivity extends AppCompatActivity {
                 else{
                     Picasso.with(getBaseContext()).load(Uri.parse(userModel.getProfilePicUrl())).into(holder.userProfilePic);
                 }
+
+                holder.bindData(userModel.getUsername(), userModel.getProfilePicUrl());
             }
+
         }
 
         @Override

@@ -23,11 +23,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:alpha="0.9"
             android:background="@android:color/black"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/activity_profile_card_item_album_name"
@@ -39,17 +39,6 @@
                 android:text="Album Name"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/activity_profile_card_item_song_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:fontFamily="sans-serif"
-                android:padding="1dp"
-                android:text="5 Songs"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
 
         </LinearLayout>
 

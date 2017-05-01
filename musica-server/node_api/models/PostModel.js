@@ -13,6 +13,7 @@ var PostSchema = new Schema({
     post_genre_tag     : String,
     user_like     : [String],
     user_love     : [String],
+    private_post : Boolean,
     post_album_pic     : String,
     post_song_url : String,
     post_time_stamp: String

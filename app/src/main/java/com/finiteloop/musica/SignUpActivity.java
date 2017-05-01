@@ -205,6 +205,46 @@ public class SignUpActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
+        } else {
+            StorageReference userImage = mStorageRef.child("Users").child(username);
+            String uriPath = "android.resource://com.finiteloop.musica/drawable/music";
+            userImage.putFile(Uri.parse(uriPath))
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImageURL = taskSnapshot.getDownloadUrl(); //Check here if error comes
+                            UserDataSharedPreference.setProfilePicURL(getBaseContext(), ImageURL.toString());
+                            try {
+                                jsonObject.put("profile_pic_url", ImageURL);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            //REQUESTING FOR STORING USER DETAIL IN MONGODB
+                            new MusicaServerAPICalls() {
+                                @Override
+                                public void isRequestSuccessful(boolean isSuccessful, String message) {
+                                    if (isSuccessful) {
+                                        Toast.makeText(getBaseContext(), "Signed Up Successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                        mProgressDialog.dismiss();
+                                        UserDataSharedPreference.setUsername(getBaseContext(), username);
+                                        UserDataSharedPreference.setEmail(getBaseContext(), email);
+                                        startActivity(new Intent(SignUpActivity.this, HomeStreamActivity.class));
+                                    } else {
+                                        mProgressDialog.dismiss();
+                                        Toast.makeText(getBaseContext(), "There was an Error while Signing Up the User", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }.submitUserSignupDetails(getBaseContext(), jsonObject);
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
         }
         return ImageURL;
     }

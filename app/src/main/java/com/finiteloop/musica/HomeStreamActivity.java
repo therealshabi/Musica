@@ -39,6 +39,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.finiteloop.musica.R.id.like;
+
 public class HomeStreamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public RecyclerView recyclerView;
@@ -123,10 +125,6 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    /*case R.id.navigation_menu_home: {
-                        Toast.makeText(getBaseContext(), "Home Button Pressed", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }*/
                     case R.id.navigation_menu_explore: {
                         //Toast.makeText(getBaseContext(), "Explore Button Pressed", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -138,15 +136,12 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                         startActivity(new Intent(HomeStreamActivity.this, PlaylistActivity.class));
                         return true;
                     }
-                    case R.id.navigation_menu_notifications: {
-                        Toast.makeText(getBaseContext(), "Notifications Button Pressed", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
                     case R.id.navigation_menu_profile: {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         Intent i = new Intent(HomeStreamActivity.this, ProfileActivity.class);
                         i.putExtra("Username", UserDataSharedPreference.getUsername(getBaseContext()));
                         i.putExtra("Profile Pic", UserDataSharedPreference.getProfileURL(getBaseContext()));
+                        i.putExtra("Email Id", UserDataSharedPreference.getEmail(getBaseContext()));
                         startActivity(i);
                         return true;
                     }
@@ -246,7 +241,8 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             postModel.setPost_pic_url(post.getString("post_album_pic"));
             postModel.setUser_profile_pic(post.getString("user_profile_pic"));
             postModel.setUsername(post.getString("username"));
-            // postModel.setTimeStamp(post.getString("post_time_stamp"));
+            postModel.setPostURL(post.getString("post_song_url"));
+            postModel.setTimeStamp(post.getString("post_time_stamp"));
             arrayList.add(postModel);
         }
         return arrayList;
@@ -292,16 +288,16 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                  holder.post_imageView.setImageResource(R.drawable.mountain_pic2);
              }
              else{
-                 Picasso.with(getBaseContext()).load(Uri.parse(postModel.getPost_pic_url())).into(holder.post_imageView);
+                 Picasso.with(mContext).load(Uri.parse(postModel.getPost_pic_url())).into(holder.post_imageView);
              }
 
-             if (postModel.getUser_profile_pic().isEmpty()) {
-                 holder.post_imageView.setImageResource(R.drawable.ic_social);
-             } else {
-                 Picasso.with(getBaseContext()).load(Uri.parse(postModel.getUser_profile_pic())).into(holder.profileImage);
-             }
+                if (postModel.getUser_profile_pic().isEmpty()) {
+                    holder.post_imageView.setImageResource(R.drawable.ic_social);
+                } else {
+                    Picasso.with(getBaseContext()).load(Uri.parse(postModel.getUser_profile_pic())).into(holder.profileImage);
+                }
 
-             holder.mUserName.setText(postModel.getUsername());
+                holder.mUserName.setText(postModel.getUsername());
 
 
 
@@ -346,7 +342,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                          }
 
                      } else {
-                         Toast.makeText(getBaseContext(), "There was an error while updating love status...", Toast.LENGTH_SHORT).show();
+                         Toast.makeText(getBaseContext(), "There was an error while updating love status..." + message, Toast.LENGTH_SHORT).show();
                      }
                  }
              }.getEmailOfUserWhoLovedPost(getBaseContext(),postModel.getPost_id());
@@ -357,6 +353,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void liked(LikeButton likeButton) {
+                     String like[] = holder.no_of_likes.getText().toString().split(" ");
+                     int a = Integer.parseInt(like[0]);
+                     holder.no_of_likes.setText((a + 1) + " Likes");
+
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -369,6 +369,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.likeButton.setLiked(Boolean.FALSE);
+                                 String like[] = holder.no_of_likes.getText().toString().split(" ");
+                                 int a = Integer.parseInt(like[0]);
+                                 if (a != 0)
+                                     holder.no_of_likes.setText((a - 1) + " Likes");
                                  Toast.makeText(getBaseContext(), "There was an error while liking the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -378,6 +383,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void unLiked(LikeButton likeButton) {
+                     String like[] = holder.no_of_likes.getText().toString().split(" ");
+                     int a = Integer.parseInt(like[0]);
+                     if (a != 0)
+                         holder.no_of_likes.setText((a - 1) + " Likes");
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_liked_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -390,6 +399,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.likeButton.setLiked(Boolean.TRUE);
+                                 String like[] = holder.no_of_likes.getText().toString().split(" ");
+                                 int a = Integer.parseInt(like[0]);
+                                 holder.no_of_likes.setText((a + 1) + " Likes");
                                  Toast.makeText(getBaseContext(), "There was an error while unliking the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -401,6 +414,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void liked(LikeButton likeButton) {
+                     String love[] = holder.no_of_loves.getText().toString().split(" ");
+                     int a = Integer.parseInt(love[0]);
+                     holder.no_of_loves.setText((a + 1) + " Loves");
+
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -413,6 +430,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.loveButton.setLiked(Boolean.FALSE);
+                                 String love[] = holder.no_of_loves.getText().toString().split(" ");
+                                 int a = Integer.parseInt(love[0]);
+                                 if (a != 0)
+                                     holder.no_of_loves.setText((a - 1) + " Loves");
                                  Toast.makeText(getBaseContext(), "There was an error while loving the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -422,6 +444,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
                  @Override
                  public void unLiked(LikeButton likeButton) {
+                     String love[] = holder.no_of_loves.getText().toString().split(" ");
+                     int a = Integer.parseInt(love[0]);
+                     if (a != 0)
+                         holder.no_of_loves.setText((a - 1) + " Loves");
+
                      JSONObject jsonObject = new JSONObject();
                      try {
                          jsonObject.put("user_loved_email_address",UserDataSharedPreference.getEmail(getBaseContext()));
@@ -434,6 +461,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                              if (isSuccessful) {
 
                              } else {
+                                 holder.loveButton.setLiked(Boolean.TRUE);
+                                 String love[] = holder.no_of_loves.getText().toString().split(" ");
+                                 int a = Integer.parseInt(love[0]);
+                                 holder.no_of_loves.setText((a + 1) + " Loves");
                                  Toast.makeText(getBaseContext(), "There was an error while unloving the post...", Toast.LENGTH_SHORT).show();
                              }
                          }
@@ -459,6 +490,8 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                  }
              });
 
+             holder.bindData(postModel.getPostURL(), postModel.getPost_pic_url(), postModel.getTitle());
+
          }
         }
 
@@ -479,7 +512,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         }
     }
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder  implements  View.OnClickListener{
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mUserName;
         TextView mGenreTag;
@@ -490,6 +523,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         CircularImageView profileImage;
         LikeButton likeButton;
         LikeButton loveButton;
+        String mMusicURL, mCoverURL, mMusicTitle;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -502,12 +536,22 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             post_imageView = (ImageView) itemView.findViewById(R.id.activity_home_stream_cardView1_picture);
             profileImage = (CircularImageView) itemView.findViewById(R.id.activity_home_stream_card_profile);
             likeButton = (LikeButton) itemView.findViewById(R.id.thumb);
-            loveButton = (LikeButton) itemView.findViewById(R.id.like);
+            loveButton = (LikeButton) itemView.findViewById(like);
         }
 
         @Override
         public void onClick(View view) {
+            Intent i = new Intent(mContext, MusicPlayer.class);
+            i.putExtra("Song URL", mMusicURL);
+            i.putExtra("Cover URL", mCoverURL);
+            i.putExtra("Title", mMusicTitle);
+            startActivity(i);
+        }
 
+        public void bindData(String musicURL, String coverURL, String title) {
+            mMusicURL = musicURL;
+            mCoverURL = coverURL;
+            mMusicTitle = title;
         }
     }
 }

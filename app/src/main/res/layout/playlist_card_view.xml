@@ -19,6 +19,7 @@
             android:padding="8dp">
 
             <ImageView
+                android:id="@+id/activity_playlist_cover_image"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
@@ -26,47 +27,19 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/artist3" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
                 <TextView
+                    android:id="@+id/activity_playlist_recycler_view_music_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="24dp"
                     android:fontFamily="sans-serif-smallcaps"
                     android:text="Love To Dance"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="sans-serif"
-                    android:singleLine="false"
-                    android:text="PinkinLark LLC"
-                    android:textColor="@android:color/white" />
-
-            </LinearLayout>
-
         </LinearLayout>
-
-        <ToggleButton
-            android:id="@+id/activity_playlist_play_pause_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/music_player_button"
-            android:foreground="@drawable/music_player_play_pause_button"
-            android:textOff=""
-            android:textOn="" />
 
     </RelativeLayout>
 

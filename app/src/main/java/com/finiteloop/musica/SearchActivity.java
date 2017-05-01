@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -43,14 +44,14 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-/*
+
         toolbar=(Toolbar)findViewById(R.id.searchActivityToolbar);
         setSupportActionBar(toolbar);
 
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
-        }*/
+        }
 
         mQueryEditText = (EditText) findViewById(R.id.activity_search_query_edit_text);
         recyclerView = (RecyclerView) findViewById(R.id.activity_search_recycler_view);
@@ -150,6 +151,15 @@ public class SearchActivity extends AppCompatActivity {
         return u;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mEmailTextView;
@@ -178,6 +188,7 @@ public class SearchActivity extends AppCompatActivity {
                         i.putExtra("Username", user.getUsername());
                         //Log.d("USer",user.getUsername());
                         i.putExtra("Profile Pic", user.getProfilePicUrl());
+                        i.putExtra("Email Id", user.getEmail());
                         startActivity(i);
                     } else {
                         Toast.makeText(getBaseContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -216,14 +227,4 @@ public class SearchActivity extends AppCompatActivity {
             return mUsers.size();
         }
     }
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                supportFinishAfterTransition();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 }

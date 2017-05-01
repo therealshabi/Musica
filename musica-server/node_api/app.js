@@ -8,6 +8,7 @@ var config = require('./config/dbConnection.js');
 var mongoose = require('mongoose');
 var async_query = require('async');
 
+mongoose.Promise = global.Promise;
 mongoose.connect(config.getMongoConnection() ,function(err) {
   if (err)
     console.log(err);

@@ -43,11 +43,12 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:fontFamily="sans-serif-smallcaps"
-                        android:text="Love To Dance"
+                        android:text="My Private Playlist"
                         android:textColor="@android:color/white"
                         android:textSize="28sp" />
 
                     <TextView
+                        android:id="@+id/activity_playlist_num_of_songs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_playlist_textView1"
@@ -82,6 +83,7 @@
 
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/activity_playlist_share_button"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_marginRight="20dp"

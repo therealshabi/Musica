@@ -7,3 +7,5 @@
 /build
 /captures
 .externalNativeBuild
+/musica-server/node_api/node_modules
+/*.env
