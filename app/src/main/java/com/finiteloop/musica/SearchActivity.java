@@ -121,7 +121,7 @@ public class SearchActivity extends AppCompatActivity {
         return user;
     }
 
-    //Parsing JSON for User user serach based on email
+    //Parsing JSON for User user search based on email
     private UserModel parseUserData(String message) {
         UserModel u = new UserModel();
         try {
@@ -143,6 +143,12 @@ public class SearchActivity extends AppCompatActivity {
             u.setFollowerList(followers);
             u.setId(d.getString("_id"));
             u.setUserInfo(d.getString("user_info"));
+            JSONArray p = d.getJSONArray("posts");
+            ArrayList<String> post = new ArrayList<>();
+            for (int j = 0; j < p.length(); j++) {
+                post.add(p.getString(j));
+            }
+            u.setPosts(post);
             //Log.d("User", u.toString());
         } catch (JSONException e) {
             Log.d("Exception", e.getMessage());

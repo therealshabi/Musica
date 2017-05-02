@@ -220,8 +220,8 @@ public abstract class MusicaServerAPICalls {
         Volley.newRequestQueue(context).add(request);
     }
 
-    public void getUserDescription(Context context) {
-        String queryURL = USER_DESCRIPTION_GET + UserDataSharedPreference.getEmail(context);
+    public void getUserDescription(Context context, String email) {
+        String queryURL = USER_DESCRIPTION_GET + email;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryURL, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

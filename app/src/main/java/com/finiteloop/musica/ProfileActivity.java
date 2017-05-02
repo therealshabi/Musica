@@ -103,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent i = new Intent(ProfileActivity.this, ProfileDescriptionActivity.class);
                 i.putExtra("Username", mUsername);
                 i.putExtra("Profile Pic", mProfilePicUrl);
+                i.putExtra("Email Id", mEmailId);
                 startActivity(i);
             }
         });

@@ -15,6 +15,15 @@ public class UserModel {
     String profilePicUrl;
     ArrayList<String> followerList;
     ArrayList<String> followingList;
+    ArrayList<String> posts;
+
+    public ArrayList<String> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(ArrayList<String> posts) {
+        this.posts = posts;
+    }
 
     public String getId() {
         return id;

@@ -161,9 +161,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                         Toast.makeText(getBaseContext(), "Report And Feedback Button Pressed", Toast.LENGTH_SHORT).show();
                         return true;
                     }
-                    case R.id.navigation_menu_settings: {
+                    case R.id.navigation_menu_about: {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
-                        Toast.makeText(getBaseContext(), "Settings Button Pressed", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(HomeStreamActivity.this, AboutActivity.class));
+                        //Toast.makeText(getBaseContext(), "About Button Pressed", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                     case R.id.navigation_menu_signOut: {

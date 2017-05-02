@@ -56,20 +56,23 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/activity_profile_description_num_of_posts"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="30dp"
-                android:text="  343"
+                android:layout_gravity="center"
+                android:text="343"
+                android:textAlignment="center"
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:alpha="0.6"
                 android:text="POSTS"
@@ -80,20 +83,22 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/activity_profile_description_num_of_followers"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginTop="30dp"
-                android:text="    673826"
+                android:text="673826"
+                android:textAlignment="center"
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:alpha="0.6"
                 android:text="FOLLOWERS"
@@ -104,20 +109,22 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/activity_profile_description_num_of_following"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="30dp"
-                android:text="        275"
+                android:layout_gravity="center"
+                android:text="275"
+                android:textAlignment="center"
                 android:textColor="@android:color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
                 android:layout_marginTop="10dp"
                 android:alpha="0.6"
                 android:text="FOLLOWING"

@@ -53,9 +53,11 @@
 
         <activity
             android:name=".LikeActivity"
-            android:theme="@style/AppTheme.CustomTheme"></activity>
-        <activity android:name=".LoveActivity"
-            android:theme="@style/AppTheme.CustomTheme"></activity>
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".LoveActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

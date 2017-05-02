@@ -68,6 +68,7 @@ module.exports = function(server){
 		user.email_address=req.params.email_address;
 		user.password=req.params.password;
 		user.profile_pic = req.params.profile_pic_url;
+		user.user_info="";
 		user.save(function(err) {
 			if(err){
 			helpers.failure(res,next,err,500);
