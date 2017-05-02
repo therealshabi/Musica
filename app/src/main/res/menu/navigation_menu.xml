@@ -9,19 +9,23 @@
         </item>-->
         <item
             android:id="@+id/navigation_menu_explore"
-            android:icon="@drawable/ic_search_button"
+            android:icon="@drawable/ic_search_black_24dp"
             android:title="@string/explore">
         </item>
         <item
             android:id="@+id/navigation_menu_playlist"
-            android:icon="@drawable/ic_drawer_playlist"
+            android:icon="@drawable/ic_stars_black_24dp"
             android:title="@string/playlist">
         </item>
         <item
             android:id="@+id/navigation_menu_profile"
-            android:icon="@drawable/ic_profile_button"
+            android:icon="@drawable/ic_person_black_24dp"
             android:title="@string/profile">
         </item>
+        <item
+            android:id="@+id/navigation_chat_rooms"
+            android:icon="@drawable/ic_chat"
+            android:title="Chat Rooms"></item>
     </group>
 
     <group android:id="@+id/group2">
@@ -32,12 +36,12 @@
         </item>
         <item
             android:id="@+id/navigation_menu_report_and_feedback"
-            android:icon="@drawable/ic_drawer_feedback"
+            android:icon="@drawable/ic_report_problem_black_24dp"
             android:title="@string/reportAndFeedback">
         </item>
         <item
             android:id="@+id/navigation_menu_signOut"
-            android:icon="@drawable/ic_drawer_signout"
+            android:icon="@drawable/ic_hotel_black_24dp"
             android:title="@string/signout">
         </item>
     </group>

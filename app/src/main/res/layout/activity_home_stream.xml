@@ -116,7 +116,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/drawer_header"
-            app:itemIconTint="#454545"
+            app:itemIconTint="#232425"
             app:itemTextColor="@android:color/black"
             app:menu="@menu/navigation_menu"
             app:theme="@style/NavigationTheme">

@@ -25,7 +25,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/artist3" />
+                android:src="@drawable/artist1" />
 
                 <TextView
                     android:id="@+id/activity_playlist_recycler_view_music_title"

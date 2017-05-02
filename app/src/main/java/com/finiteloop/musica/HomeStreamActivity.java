@@ -156,6 +156,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                         startActivity(i);
                         return true;
                     }
+                    case R.id.navigation_chat_rooms: {
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        startActivity(new Intent(HomeStreamActivity.this, RoomActivity.class));
+                        return true;
+                    }
                     case R.id.navigation_menu_report_and_feedback: {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         Toast.makeText(getBaseContext(), "Report And Feedback Button Pressed", Toast.LENGTH_SHORT).show();
