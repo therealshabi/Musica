@@ -18,10 +18,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +62,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
     CircularImageView mNavigationViewHeaderProfilePic;
     Context mContext;
     CircularImageView mHomeStreamPostProfileImageView;
+    Context activityContext;
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -70,6 +74,8 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         mContext = this;
         mAuth = FirebaseAuth.getInstance();
+
+        activityContext = this;
 
         homeStreamPostArrayList=new ArrayList<>();
 
@@ -196,6 +202,10 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
+            case R.id.search:
+                startActivity(new Intent(HomeStreamActivity.this, SearchActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -250,6 +260,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             postModel.setPostURL(post.getString("post_song_url"));
             postModel.setTimeStamp(Timestamp.valueOf(post.getString("post_time_stamp")));
             postModel.setHits(post.getInt("hits"));
+            postModel.setUser_email(post.getString("email_address"));
             arrayList.add(postModel);
         }
         //Apply Algo when you have more than 2 posts
@@ -288,6 +299,13 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
     @Override
     public void onRefresh() {
         fetchData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.profile_activity_album_search, menu);
+        return true;
     }
 
     @Override
@@ -529,6 +547,17 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
              holder.bindData(postModel.getPostURL(), postModel.getPost_pic_url(), postModel.getTitle(), postModel.getPost_id());
 
+             holder.mUserCard.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     Intent i = new Intent(activityContext, ProfileActivity.class);
+                     i.putExtra("Username", postModel.getUsername());
+                     i.putExtra("Profile Pic", postModel.getUser_profile_pic());
+                     i.putExtra("Email Id", postModel.getUser_email());
+                     startActivity(i);
+                 }
+             });
+
          }
         }
 
@@ -560,6 +589,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         CircularImageView profileImage;
         LikeButton likeButton;
         LikeButton loveButton;
+        LinearLayout mUserCard;
         String mMusicURL, mCoverURL, mMusicTitle, mPostId;
 
         public RecyclerViewHolder(View itemView) {
@@ -574,6 +604,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             profileImage = (CircularImageView) itemView.findViewById(R.id.activity_home_stream_card_profile);
             likeButton = (LikeButton) itemView.findViewById(R.id.thumb);
             loveButton = (LikeButton) itemView.findViewById(like);
+            mUserCard = (LinearLayout) itemView.findViewById(R.id.activity_username_card_user);
         }
 
         @Override

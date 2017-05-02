@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
     String mUsername;
     String mProfilePicUrl;
     String mEmailId;
+    TextView mNumOfSongsText;
     ArrayList<PostModel> mProfilePlaylist;
     Context context;
 
@@ -66,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         mFollowButton = (ToggleButton) findViewById(R.id.activity_profile_follow_button);
         mProfileName = (TextView) findViewById(R.id.profile_activity_profile_name);
         mProfilePic = (CircularImageView) findViewById(R.id.profile_activity_profile_pic);
+        mNumOfSongsText = (TextView) findViewById(R.id.activity_profile_number_of_songs);
 
         setSupportActionBar(mToolbar);
 
@@ -124,6 +126,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (isSuccessful) {
                     try {
                         mProfilePlaylist = parseJsonResponse(message);
+                        mNumOfSongsText.setText(mProfilePlaylist.size() + " Songs");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -159,6 +162,7 @@ public class ProfileActivity extends AppCompatActivity {
             postModel.setTimeStamp(Timestamp.valueOf(post.getString("post_time_stamp")));
             postModel.setPrivatePost(post.getBoolean("private_post"));
             postModel.setHits(post.getInt("hits"));
+            postModel.setUser_email(post.getString("email_address"));
             arrayList.add(postModel);
         }
         return arrayList;
@@ -180,7 +184,7 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
 
             case R.id.search:
-                startActivity(new Intent(ProfileActivity.this, SignInActivity.class));
+                startActivity(new Intent(ProfileActivity.this, SearchActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

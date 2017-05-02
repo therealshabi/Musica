@@ -109,6 +109,7 @@ public class PlaylistActivity extends AppCompatActivity {
             postModel.setTimeStamp(Timestamp.valueOf(post.getString("post_time_stamp")));
             postModel.setPrivatePost(post.getBoolean("private_post"));
             postModel.setHits(post.getInt("hits"));
+            postModel.setUser_email(post.getString("email_address"));
             arrayList.add(postModel);
         }
         return arrayList;
