@@ -1,11 +1,16 @@
 package com.finiteloop.musica.Models;
 
+import java.sql.Timestamp;
+import java.util.Comparator;
+
 /**
  * Created by Shivam on 20-04-2017.
  */
 
 public class PostModel {
 
+    public static final Comparator<PostModel> hitsComparator = new MyComparator();
+    public static final Comparator<PostModel> timeStampComparator = new newTimeComparator();
     String post_id;
     String genreTag;
     String title;
@@ -14,9 +19,10 @@ public class PostModel {
     String no_of_loves;
     String user_profile_pic;
     String username;
-    String timeStamp;
+    Timestamp timeStamp;
     String postURL;
     boolean privatePost;
+    int hits;
 
     public boolean isPrivatePost() {
         return privatePost;
@@ -34,12 +40,20 @@ public class PostModel {
         this.postURL = postURL;
     }
 
-    public String getTimeStamp() {
+    public Timestamp getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public int getHits() {
+        return hits;
+    }
+
+    public void setHits(int hits) {
+        this.hits = hits;
     }
 
     public String getUsername() {
@@ -107,5 +121,24 @@ public class PostModel {
 
     public void setNo_of_loves(String no_of_loves) {
         this.no_of_loves = no_of_loves;
+    }
+
+    static class MyComparator implements Comparator<PostModel> {
+
+        @Override
+        public int compare(PostModel o1, PostModel o2) {
+            if (o1.getHits() > o2.getHits())
+                return -1;
+            if (o1.getHits() < o2.getHits())
+                return 1;
+            return 0;
+        }
+    }
+
+    private static class newTimeComparator implements Comparator<PostModel> {
+        @Override
+        public int compare(PostModel o1, PostModel o2) {
+            return o1.getTimeStamp().compareTo(o2.getTimeStamp());
+        }
     }
 }

@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -155,8 +156,9 @@ public class ProfileActivity extends AppCompatActivity {
             postModel.setUser_profile_pic(post.getString("user_profile_pic"));
             postModel.setUsername(post.getString("username"));
             postModel.setPostURL(post.getString("post_song_url"));
-            postModel.setTimeStamp(post.getString("post_time_stamp"));
+            postModel.setTimeStamp(Timestamp.valueOf(post.getString("post_time_stamp")));
             postModel.setPrivatePost(post.getBoolean("private_post"));
+            postModel.setHits(post.getInt("hits"));
             arrayList.add(postModel);
         }
         return arrayList;

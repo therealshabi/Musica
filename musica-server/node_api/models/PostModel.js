@@ -16,7 +16,8 @@ var PostSchema = new Schema({
     private_post : Boolean,
     post_album_pic     : String,
     post_song_url : String,
-    post_time_stamp: String
+    post_time_stamp: String,
+    hits : Number
 });
 
 // users here is the collection(table) name that we are

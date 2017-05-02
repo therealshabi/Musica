@@ -55,6 +55,7 @@ module.exports = function(server, async_query){
     post_model.post_time_stamp = req.params.post_time_stamp;
 		post_model.user_like=[];
 		post_model.user_love=[];
+    post_model.hits = 0;
 		post_model.post_album_pic=req.params.post_album_pic;
     post_model.post_song_url = req.params.post_song_url;
     post_model.private_post = req.params.private_post;
@@ -98,6 +99,7 @@ module.exports = function(server, async_query){
        helpers.failure(res,next,'The specified user cannot be found in the database',404);
      }
      post.user_like.push(req.params.user_liked_email_address);
+     post.hits = post.hits+1;
      post.save(function(err) {
        if(err) {
          helpers.failure(res,next,'The user cannot be added into the database',500);
@@ -126,6 +128,7 @@ module.exports = function(server, async_query){
        helpers.failure(res,next,'The specified user cannot be found in the database',404);
      }
      post.user_love.push(req.params.user_loved_email_address);
+     post.hits = post.hits+1;
      post.save(function(err) {
        if(err) {
          helpers.failure(res,next,'The user cannot be added into the database',500);
@@ -155,6 +158,7 @@ module.exports = function(server, async_query){
      }
      var index = post.user_like.indexOf(req.params.user_liked_email_address);
      post.user_like.splice(index,1);
+     post.hits = post.hits+1;
      post.save(function(err) {
        if(err) {
          helpers.failure(res,next,'The user cannot be added into the database',500);
@@ -184,6 +188,7 @@ module.exports = function(server, async_query){
      }
      var index = post.user_love.indexOf(req.params.user_loved_email_address);
      post.user_love.splice(index,1);
+     post.hits = post.hits+1;
      post.save(function(err) {
        if(err) {
          helpers.failure(res,next,'The user cannot be added into the database',500);
@@ -210,7 +215,7 @@ module.exports = function(server, async_query){
         helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
       }
       if(posts === null || posts.length ===0){
-        //helpers.failure(res,next,'This User haven\'t posted anything',404);
+        helpers.failure(res,next,'This User haven\'t posted anything',404);
       }
       else{
       for(var i=0;i<posts.length;i++)
@@ -394,6 +399,36 @@ module.exports = function(server, async_query){
 
       });
     });
+
+
+    // route to update the hits of post
+    server.put("/post/hits/:id",function(req,res,next){
+     req.assert('id','Id is required').notEmpty();
+
+     var errors = req.validationErrors();
+     if (errors) {
+       helpers.failure(res,next,errors,404);
+     }
+
+     PostModel.findOne({ _id: req.params.id }, function (err, post) {
+       if(err) {
+         helpers.failure(res,next,'Something went wrong while fetching from the database',500);
+       }
+       if(post === null){
+         helpers.failure(res,next,'The specified user cannot be found in the database',404);
+       }
+       post.hits = post.hits+1;
+       post.save(function(err) {
+         if(err) {
+           helpers.failure(res,next,'Smething went wrong!',500);
+         }
+         else {
+           helpers.success(res,next,post);
+         }
+       });
+     });
+    });
+
 
 
 }

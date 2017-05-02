@@ -39,9 +39,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 public class AddPostActivity extends AppCompatActivity {
@@ -233,7 +232,7 @@ public class AddPostActivity extends AppCompatActivity {
             jsonObject.put("post_song_url", mPostURL);
             jsonObject.put("user_profile_pic", UserDataSharedPreference.getProfileURL(getBaseContext()));
             jsonObject.put("username", UserDataSharedPreference.getUsername(getBaseContext()));
-            String timeStamp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+            String timeStamp = new Timestamp(System.currentTimeMillis()).toString();
             jsonObject.put("post_time_stamp", timeStamp);
             if (mPrivateCheckBox.isChecked()) {
                 jsonObject.put("private_post", true);

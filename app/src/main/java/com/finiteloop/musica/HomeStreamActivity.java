@@ -16,6 +16,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,12 +38,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.finiteloop.musica.R.id.like;
 
 public class HomeStreamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final double TIMESTAMP_WEIGHT = 0.6;
+    private static final double HITS_WEIGHT = 0.4;
     public RecyclerView recyclerView;
     public ArrayList<PostModel> homeStreamPostArrayList;
     Toolbar mToolbar;
@@ -206,6 +211,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                     try {
                         homeStreamPostArrayList.clear();
                         homeStreamPostArrayList = parseJsonResponse(message);
+                        //Collections.reverse(homeStreamPostArrayList);
                         recyclerView.setAdapter(new RecyclerViewAdapter(getBaseContext(),homeStreamPostArrayList));
 
                     } catch (JSONException e) {
@@ -242,10 +248,41 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             postModel.setUser_profile_pic(post.getString("user_profile_pic"));
             postModel.setUsername(post.getString("username"));
             postModel.setPostURL(post.getString("post_song_url"));
-            postModel.setTimeStamp(post.getString("post_time_stamp"));
+            postModel.setTimeStamp(Timestamp.valueOf(post.getString("post_time_stamp")));
+            postModel.setHits(post.getInt("hits"));
             arrayList.add(postModel);
         }
+        //Apply Algo when you have more than 2 posts
+        if (arrayList.size() > 2)
+            arrayList = applySortAlgo(arrayList);
         return arrayList;
+    }
+
+    //Sorting algo for how post would appear in homeStream
+    private ArrayList<PostModel> applySortAlgo(ArrayList<PostModel> homeStreamPostArrayList) {
+        Log.d("Size Check", "" + homeStreamPostArrayList.size());
+        Collections.sort(homeStreamPostArrayList, PostModel.timeStampComparator);
+        Collections.reverse(homeStreamPostArrayList);
+        ArrayList<PostModel> temp = new ArrayList<>();
+        PostModel first = homeStreamPostArrayList.remove(0);
+        PostModel second = homeStreamPostArrayList.remove(0);
+        temp.addAll(homeStreamPostArrayList);
+        if (temp.size() > 2) {
+            int i = 0;
+            for (i = 0; (i + 3) < temp.size(); i += 3) {
+                Collections.sort(temp.subList(i, 3), PostModel.hitsComparator);
+            }
+            if (i > temp.size()) {
+                int t = i - temp.size() - 1;
+                Collections.sort(temp.subList(t, temp.size()), PostModel.hitsComparator);
+            }
+        } else if (temp.size() != 0) {
+            Collections.sort(temp, PostModel.hitsComparator);
+        }
+        //First 2 posts as it as they are the most recenet one
+        temp.add(0, first);
+        temp.add(1, second);
+        return temp;
     }
 
     @Override
@@ -490,7 +527,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                  }
              });
 
-             holder.bindData(postModel.getPostURL(), postModel.getPost_pic_url(), postModel.getTitle());
+             holder.bindData(postModel.getPostURL(), postModel.getPost_pic_url(), postModel.getTitle(), postModel.getPost_id());
 
          }
         }
@@ -523,7 +560,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
         CircularImageView profileImage;
         LikeButton likeButton;
         LikeButton loveButton;
-        String mMusicURL, mCoverURL, mMusicTitle;
+        String mMusicURL, mCoverURL, mMusicTitle, mPostId;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -541,6 +578,13 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
 
         @Override
         public void onClick(View view) {
+            new MusicaServerAPICalls() {
+                @Override
+                public void isRequestSuccessful(boolean isSuccessful, String message) {
+
+                }
+            }.incrementHits(getBaseContext(), mPostId);
+
             Intent i = new Intent(mContext, MusicPlayer.class);
             i.putExtra("Song URL", mMusicURL);
             i.putExtra("Cover URL", mCoverURL);
@@ -548,10 +592,11 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
             startActivity(i);
         }
 
-        public void bindData(String musicURL, String coverURL, String title) {
+        public void bindData(String musicURL, String coverURL, String title, String id) {
             mMusicURL = musicURL;
             mCoverURL = coverURL;
             mMusicTitle = title;
+            mPostId = id;
         }
     }
 }

@@ -42,7 +42,7 @@ public abstract class MusicaServerAPICalls {
     private static final String GET_USER_POST_LOVE_REQUEST = SERVER_ADDRESS + "/user/post/love/";
     private static final String GET_USER_POST = SERVER_ADDRESS + "/user/post/";
     private static final String GET_USER_PRIVATE_POST = SERVER_ADDRESS + "/user/post/private/";
-
+    private static final String PUT_POST_HITS = SERVER_ADDRESS + "/post/hits/";
 
     private static final String USER_DESCRIPTION_POST = SERVER_ADDRESS + "/user/description";
     private static final String USER_DESCRIPTION_GET = SERVER_ADDRESS + "/user/description/";
@@ -509,6 +509,30 @@ public abstract class MusicaServerAPICalls {
     public void getUserPrivatePosts(Context context) {
         String queryURL = GET_USER_PRIVATE_POST + UserDataSharedPreference.getEmail(context);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryURL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, response.getString(JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Volley.newRequestQueue(context).add(request);
+    }
+
+    public void incrementHits(Context context, String id) {
+        String queryURL = PUT_POST_HITS + id;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, queryURL, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
