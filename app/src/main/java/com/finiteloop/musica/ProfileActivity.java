@@ -286,11 +286,11 @@ public class ProfileActivity extends AppCompatActivity {
                         followingUsers = parseFollowingUsersResponse(message);
 
                         if (followingUsers.contains(mEmailId)) {
-                            mFollowButton.setChecked(true);
                             check = 1;
+                            mFollowButton.setChecked(true);
                         } else {
-                            mFollowButton.setChecked(false);
                             check = 0;
+                            mFollowButton.setChecked(false);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

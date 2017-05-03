@@ -26,7 +26,7 @@ public abstract class MusicaServerAPICalls {
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
 
-    private static final String SERVER_ADDRESS = "http://192.168.0.5:22222";
+    private static final String SERVER_ADDRESS = "http://192.168.1.106:22222";
     private static final String USER_SIGNUP_POST_REQUEST = SERVER_ADDRESS + "/signup";
     private static final String USER_SEARCH_GET_REQUEST = SERVER_ADDRESS + "/user/search/";
     private static final String USER_EMAIL_GET_REQUEST = SERVER_ADDRESS + "/user/";
