@@ -1,10 +1,12 @@
 package com.finiteloop.musica;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    public static int check = 0;
     ImageView mCoverPic;
     RecyclerView mRecyclerView;
     Toolbar mToolbar;
@@ -48,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
     String mEmailId;
     TextView mNumOfSongsText;
     ArrayList<PostModel> mProfilePlaylist;
+    ArrayList<String> followingUsers;
     Context context;
 
     @Override
@@ -79,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         context = this;
+        followingUsers = new ArrayList<>();
 
         /*Drawable coverPic = getResources().getDrawable(R.drawable.concert);
         coverPic.setAlpha(150);
@@ -108,13 +113,73 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Todo
         mFollowButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
 
+                    if (check == 0) {
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("follower_email_address", mEmailId);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        new MusicaServerAPICalls() {
+                            @Override
+                            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                                if (isSuccessful) {
+                                    Toast.makeText(getBaseContext(), "Successfully followed the user :)", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getBaseContext(), "There was an error while following the user...", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.userFollowingRequest(getBaseContext(), jsonObject, UserDataSharedPreference.getEmail(getBaseContext()));
+                    }
                 } else {
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setTitle("Un-Follow Request ");
+                    builder.setMessage("Are you sure you want to unfollow ?");
+
+                    //YES BUTTON
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            JSONObject jsonObject = new JSONObject();
+                            try {
+                                jsonObject.put("follower_email_address", mEmailId);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            new MusicaServerAPICalls() {
+                                @Override
+                                public void isRequestSuccessful(boolean isSuccessful, String message) {
+                                    if (isSuccessful) {
+                                        Toast.makeText(getBaseContext(), "Successfully unfollowed the user :)", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getBaseContext(), "There was an error while following the user...", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }.userUnFollowingRequest(getBaseContext(), jsonObject, UserDataSharedPreference.getEmail(getBaseContext()));
+                        }
+                    });
+
+                    //NO BUTTON
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            check = 1;
+                            mFollowButton.setChecked(true);
+                        }
+                    });
+
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
 
                 }
             }
@@ -191,6 +256,15 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private ArrayList<String> parseFollowingUsersResponse(String message) throws JSONException {
+        ArrayList<String> users = new ArrayList<>();
+        JSONArray data = new JSONArray(message);
+        for (int i = 0; i < data.length(); i++) {
+            users.add(data.getString(i));
+        }
+        return users;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -203,6 +277,61 @@ public class ProfileActivity extends AppCompatActivity {
         mProfileName.setText(mUsername);
 
         Picasso.with(getBaseContext()).load(Uri.parse(mProfilePicUrl)).into(mProfilePic);
+        new MusicaServerAPICalls() {
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                if (isSuccessful) {
+                    try {
+                        followingUsers.clear();
+                        followingUsers = parseFollowingUsersResponse(message);
+
+                        if (followingUsers.contains(mEmailId)) {
+                            mFollowButton.setChecked(true);
+                            check = 1;
+                        } else {
+                            mFollowButton.setChecked(false);
+                            check = 0;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "There was an error while fetching posts!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.getUserFollowingUsers(getBaseContext(), UserDataSharedPreference.getEmail(getBaseContext()));
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new MusicaServerAPICalls() {
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                if (isSuccessful) {
+                    try {
+                        followingUsers.clear();
+                        followingUsers = parseFollowingUsersResponse(message);
+                        if (followingUsers.contains(mEmailId)) {
+                            check = 1;
+                            mFollowButton.setChecked(true);
+                        } else {
+                            check = 0;
+                            mFollowButton.setChecked(false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "There was an error while fetching posts!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.getUserFollowingUsers(getBaseContext(), UserDataSharedPreference.getEmail(getBaseContext()));
+
     }
 
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {

@@ -238,5 +238,20 @@ module.exports = function(server){
 		});
 	});
 
+	// route to get the user following users
+	server.get("/user/find/following/:email_address",function(req,res,next){
+		var email = req.params.email_address;
+		UserModel.findOne({email_address:email}, function(err, user){
+			if(err) {
+				helpers.failure(res,next,'Something went wrong while fetching user from the database',500);
+			}
+			if(user === null){
+				helpers.failure(res,next,'The specified user cannot be found in the database',404);
+			}
+			var users = user.following;
+					helpers.success(res,next,users);
+		});
+	});
+
 
 }

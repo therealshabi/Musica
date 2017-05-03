@@ -26,7 +26,7 @@ public abstract class MusicaServerAPICalls {
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
 
-    private static final String SERVER_ADDRESS = "http://192.168.0.5:22222";
+    private static final String SERVER_ADDRESS = "http://192.168.43.37:22222";
     private static final String USER_SIGNUP_POST_REQUEST = SERVER_ADDRESS + "/signup";
     private static final String USER_SEARCH_GET_REQUEST = SERVER_ADDRESS + "/user/search/";
     private static final String USER_EMAIL_GET_REQUEST = SERVER_ADDRESS + "/user/";
@@ -43,6 +43,9 @@ public abstract class MusicaServerAPICalls {
     private static final String GET_USER_POST = SERVER_ADDRESS + "/user/post/";
     private static final String GET_USER_PRIVATE_POST = SERVER_ADDRESS + "/user/post/private/";
     private static final String PUT_POST_HITS = SERVER_ADDRESS + "/post/hits/";
+    private static final String USER_FOLLOW_REQUEST = SERVER_ADDRESS + "/following/";
+    private static final String USER_UNFOLLOW_REQUEST = SERVER_ADDRESS + "/unfollowing/";
+    private static final String GET_FOLLOWING_USERS = SERVER_ADDRESS + "/user/find/following/";
 
     private static final String USER_DESCRIPTION_POST = SERVER_ADDRESS + "/user/description";
     private static final String USER_DESCRIPTION_GET = SERVER_ADDRESS + "/user/description/";
@@ -533,6 +536,84 @@ public abstract class MusicaServerAPICalls {
     public void incrementHits(Context context, String id) {
         String queryURL = PUT_POST_HITS + id;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, queryURL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, response.getString(JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Volley.newRequestQueue(context).add(request);
+    }
+
+    public void userFollowingRequest(Context context, JSONObject details, String email) {
+        String query = USER_FOLLOW_REQUEST + email;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, query, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, SUCCESS_STATUS);
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                    Log.d("Exception", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonObjectRequest);
+    }
+
+    public void userUnFollowingRequest(Context context, JSONObject details, String email) {
+        String query = USER_UNFOLLOW_REQUEST + email;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, query, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(JSON_STATUS).equals(SUCCESS_STATUS)) {
+                        isRequestSuccessful(true, SUCCESS_STATUS);
+                    } else {
+                        isRequestSuccessful(false, response.getString(JSON_STATUS));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                    Log.d("Exception", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonObjectRequest);
+    }
+
+    public void getUserFollowingUsers(Context context, String email) {
+        String queryURL = GET_FOLLOWING_USERS + email;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, queryURL, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
