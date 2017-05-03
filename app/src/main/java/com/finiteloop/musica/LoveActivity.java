@@ -77,6 +77,7 @@ public class LoveActivity extends AppCompatActivity {
             UserModel userModel = new UserModel();
             userModel.setUsername(user.getString("user_name"));
             userModel.setProfilePicUrl(user.getString("profile_pic"));
+            userModel.setEmail(user.getString("email_address"));
             arrayList.add(userModel);
         }
         return arrayList;
@@ -87,7 +88,7 @@ public class LoveActivity extends AppCompatActivity {
         CircularImageView userProfilePic;
         TextView username;
         String mProfilePicURL;
-        String mUsername;
+        String mUsername, mEmail;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -101,12 +102,14 @@ public class LoveActivity extends AppCompatActivity {
             Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
             intent.putExtra("Username", mUsername);
             intent.putExtra("Profile Pic", mProfilePicURL);
+            intent.putExtra("Email Id", mEmail);
             startActivity(intent);
         }
 
-        public void bindData(String username, String profilePicUrl) {
+        public void bindData(String username, String profilePicUrl, String email) {
             mProfilePicURL = profilePicUrl;
             mUsername = username;
+            mEmail = email;
         }
     }
 
@@ -140,7 +143,7 @@ public class LoveActivity extends AppCompatActivity {
                     Picasso.with(getBaseContext()).load(Uri.parse(userModel.getProfilePicUrl())).into(holder.userProfilePic);
                 }
 
-                holder.bindData(userModel.getUsername(), userModel.getProfilePicUrl());
+                holder.bindData(userModel.getUsername(), userModel.getProfilePicUrl(), userModel.getEmail());
             }
 
         }

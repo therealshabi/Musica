@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="343"
+                android:text="0"
                 android:textAlignment="center"
                 android:textColor="@android:color/white" />
 
@@ -91,7 +91,7 @@
                 android:id="@+id/activity_profile_description_num_of_followers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="673826"
+                android:text="0"
                 android:textAlignment="center"
                 android:textColor="@android:color/white" />
 
@@ -118,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="275"
+                android:text="0"
                 android:textAlignment="center"
                 android:textColor="@android:color/white" />
 
