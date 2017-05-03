@@ -26,7 +26,7 @@ public abstract class MusicaServerAPICalls {
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
 
-    private static final String SERVER_ADDRESS = "http://192.168.43.37:22222";
+    private static final String SERVER_ADDRESS = "http://192.168.0.5:22222";
     private static final String USER_SIGNUP_POST_REQUEST = SERVER_ADDRESS + "/signup";
     private static final String USER_SEARCH_GET_REQUEST = SERVER_ADDRESS + "/user/search/";
     private static final String USER_EMAIL_GET_REQUEST = SERVER_ADDRESS + "/user/";
@@ -46,12 +46,8 @@ public abstract class MusicaServerAPICalls {
     private static final String USER_FOLLOW_REQUEST = SERVER_ADDRESS + "/following/";
     private static final String USER_UNFOLLOW_REQUEST = SERVER_ADDRESS + "/unfollowing/";
     private static final String GET_FOLLOWING_USERS = SERVER_ADDRESS + "/user/find/following/";
-
     private static final String USER_DESCRIPTION_POST = SERVER_ADDRESS + "/user/description";
     private static final String USER_DESCRIPTION_GET = SERVER_ADDRESS + "/user/description/";
-
-
-    //public ArrayList<PostModel> homeStreamPostArrayList;
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 
@@ -634,5 +630,4 @@ public abstract class MusicaServerAPICalls {
         });
         Volley.newRequestQueue(context).add(request);
     }
-
 }

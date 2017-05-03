@@ -9,17 +9,17 @@
         </item>-->
         <item
             android:id="@+id/navigation_menu_explore"
-            android:icon="@drawable/ic_search_black_24dp"
+            android:icon="@drawable/ic_search_grey_500_24dp"
             android:title="@string/explore">
         </item>
         <item
             android:id="@+id/navigation_menu_playlist"
-            android:icon="@drawable/ic_stars_black_24dp"
+            android:icon="@drawable/ic_stars_grey_500_24dp"
             android:title="@string/playlist">
         </item>
         <item
             android:id="@+id/navigation_menu_profile"
-            android:icon="@drawable/ic_person_black_24dp"
+            android:icon="@drawable/ic_person_grey_500_24dp"
             android:title="@string/profile">
         </item>
         <item
@@ -31,17 +31,17 @@
     <group android:id="@+id/group2">
         <item
             android:id="@+id/navigation_menu_about"
-            android:icon="@drawable/ic_info_black_24dp"
+            android:icon="@drawable/ic_info_grey_500_24dp"
             android:title="@string/about">
         </item>
         <item
             android:id="@+id/navigation_menu_report_and_feedback"
-            android:icon="@drawable/ic_report_problem_black_24dp"
+            android:icon="@drawable/ic_warning_grey_500_24dp"
             android:title="@string/reportAndFeedback">
         </item>
         <item
             android:id="@+id/navigation_menu_signOut"
-            android:icon="@drawable/ic_hotel_black_24dp"
+            android:icon="@drawable/ic_hotel_grey_500_24dp"
             android:title="@string/signout">
         </item>
     </group>

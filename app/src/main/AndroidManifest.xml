@@ -59,6 +59,7 @@
         <activity android:name=".AboutActivity" />
         <activity android:name=".ChatRoom" />
         <activity android:name=".RoomActivity" />
+        <activity android:name=".ReportAndFeedbackActivity" />
     </application>
 
 </manifest>

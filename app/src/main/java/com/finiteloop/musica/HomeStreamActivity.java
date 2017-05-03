@@ -163,7 +163,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                     }
                     case R.id.navigation_menu_report_and_feedback: {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
-                        Toast.makeText(getBaseContext(), "Report And Feedback Button Pressed", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(HomeStreamActivity.this, ReportAndFeedbackActivity.class));
                         return true;
                     }
                     case R.id.navigation_menu_about: {
@@ -379,7 +379,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                          }
 
                      } else {
-                         Toast.makeText(getBaseContext(), "There was an error while updating like status...", Toast.LENGTH_SHORT).show();
+                         //Toast.makeText(getBaseContext(), "There was an error while updating like status...", Toast.LENGTH_SHORT).show();
                      }
                  }
              }.getEmailOfUserWhoLikedPost(getBaseContext(),postModel.getPost_id());
@@ -403,7 +403,7 @@ public class HomeStreamActivity extends AppCompatActivity implements SwipeRefres
                          }
 
                      } else {
-                         Toast.makeText(getBaseContext(), "There was an error while updating love status..." + message, Toast.LENGTH_SHORT).show();
+                         //  Toast.makeText(getBaseContext(), "There was an error while updating love status..." + message, Toast.LENGTH_SHORT).show();
                      }
                  }
              }.getEmailOfUserWhoLovedPost(getBaseContext(),postModel.getPost_id());
